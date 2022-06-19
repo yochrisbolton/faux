@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { GetUserIdByToken } from '__common/authentication/models/user/GET/GetUserIdByToken'
+import { GetUserIdByToken } from 'pages/__common/authentication/models/user/GET/GetUserIdByToken'
 import { TokenServices } from 'pages/__common/authentication/services/TokenServices'
 import striptags from 'striptags'
 
@@ -9,7 +9,7 @@ export class RegisterService {
 
     const pageBanner = {
       title: 'Login or Register',
-      info: 'Make the best of <strong>Godot Asset Library</strong> with a free account'
+      info: `Make the best of <strong>${process.env.PROJECT_NAME ?? 'faux'}</strong> with a free account`
     }
 
     if (authToken !== undefined) {
