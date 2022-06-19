@@ -1,7 +1,7 @@
 <% it.meta = {
-  title: `Home | ${process.env.PROJECT_NAME}`,
+  title: `Home | ${process.env.PROJECT_NAME ?? 'faux'}`,
   description: 'Faux - batteries included Typescript Express starter',
-  url: `${process.env.ROOT_ADDRESS}`,
+  url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}`,
   moduleName: 'homepage'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>

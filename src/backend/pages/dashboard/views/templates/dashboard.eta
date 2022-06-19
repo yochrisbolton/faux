@@ -1,7 +1,7 @@
 <% it.meta = {
-  title: 'Dashboard | Godot Asset Library',
-  description: 'Manage your Godot Asset Library experience',
-  url: 'https://godotlibrary.com/dashboard',
+  title: `Dashboard | ${process.env.PROJECT_NAME ?? 'faux'}`,
+  description: `Manage your ${process.env.PROJECT_NAME ?? 'faux'} experience`,
+  url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}/dashboard`,
   moduleName: 'dashboard'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
@@ -14,8 +14,7 @@
     </div>
   </div>
   <div class="column">
-    <form method="POST" action="/dashboard/update/info"
-      onsubmit="window.godotLibrary.formTools.sendFormAjax(event, this)">
+    <form method="POST" action="/dashboard/update/info" onsubmit="window.faux.formTools.sendFormAjax(event, this)">
       <h2>Account Information</h2>
       <div class="input-container">
         <input class="input" it="username" type="text" name="username" placeholder=" " value="<%= it.info.username %>">
@@ -34,8 +33,7 @@
     </form>
   </div>
   <div class="column">
-    <form method="POST" action="/dashboard/update/password"
-      onsubmit="window.godotLibrary.formTools.sendFormAjax(event, this)">
+    <form method="POST" action="/dashboard/update/password" onsubmit="window.faux.formTools.sendFormAjax(event, this)">
       <h2>Account Security</h2>
       <div class="input-container">
         <input class="input" id="password-current" name="password-current" type="password" placeholder=" ">

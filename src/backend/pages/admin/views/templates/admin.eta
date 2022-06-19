@@ -1,7 +1,7 @@
 <% it.meta = {
-  title: 'Admin | Godot Asset Library',
-  description: 'Manage Godot Asset Library settings',
-  url: 'https://godotlibrary.com/admin',
+  title: `Admin | ${process.env.PROJECT_NAME ?? 'faux'}`,
+  description: `Manage ${process.env.PROJECT_NAME ?? 'faux'} settings`,
+  url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}/admin`,
   moduleName: 'admin'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
