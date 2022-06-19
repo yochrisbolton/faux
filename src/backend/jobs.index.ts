@@ -1,4 +1,4 @@
 /**
  * API exports
  */
-export * from './pages/__common/authentication/jobs/index'
+export * from './common/authentication/jobs/index'

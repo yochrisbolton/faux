@@ -10,8 +10,8 @@
   <div class="contents">
     <div class="brand">
       <a href="/">
-        <div class="title">Asset Library</div>
-        <div class="subtitle">by <span class="strong">LittleMouseGames</span></div>
+        <div class="title">Faux</div>
+        <div class="subtitle">by <span class="strong">yochrisbolton</span></div>
       </a>
     </div>
     <form method="POST" action="/search">
@@ -21,23 +21,9 @@
       </div>
     </form>
     <div class="links">
-      <a href="/search/?q=&category=2d+tools" class="link">2D Tools</a>
-      <a href="/search/?q=&category=3d+tools" class="link">3D Tools</a>
-      <a href="/search/?q=&category=tools" class="link">Tools</a>
-      <a href="/search/?q=&category=shaders" class="link">Shaders</a>
-      <div class="dropdown categories" onclick="window.faux.dropdown.showContent(event, this)">
-        <div class="value">More Categories</div>
-        <div class="value mobile">Categories</div>
-        <span class="iconify" data-icon="bxs:chevron-down"></span>
-        <div class="options">
-          <a href="/search/?q=&category=materials">Materials</a>
-          <a href="/search/?q=&category=scripts">Scripts</a>
-          <a href="/search/?q=&category=misc">Misc</a>
-          <a href="/search/?q=&category=templates">Templates</a>
-          <a href="/search/?q=&category=projects">Projects</a>
-          <a href="/search/?q=&category=demos">Demos</a>
-        </div>
-      </div>
+      <a href="#" class="link">Categories</a>
+      <a href="#" class="link">Deals</a>
+      <a href="#" class="link">Latest Arrivals</a>
     </div>
     <div class="account actions">
       <span class="iconify mobile-search" data-icon="eva:search-outline"
@@ -49,8 +35,6 @@
         <span class="iconify chevron" data-icon="bxs:chevron-down"></span>
         <div class="options">
           <a href="/dashboard">Dashboard</a>
-          <a href="/dashboard/saved/">Saved Assets</a>
-          <a href="/dashboard/reviews/">Reviewed Assets</a>
           <% if (it?._locals?.role === 'admin') { %><a href="/admin">Admin Dashboard</a> <% } %>
           <a href="/api/users/logout">Logout</a>
         </div>

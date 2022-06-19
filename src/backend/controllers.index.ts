@@ -1,7 +1,7 @@
 /**
  * API exports
  **/
-export * from './pages/__common/authentication/controllers/index'
+export * from './common/authentication/controllers/index'
 
 /**
  * Pages exports
