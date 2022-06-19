@@ -52,6 +52,8 @@ export class UserServices {
       // ignore
     }
 
+    logger.log('info', 'hi')
+
     if (siteRestrictions?.disable_new_accounts === true) {
       throw new Error('Account registrations have been temporarily disabled')
     }
@@ -70,10 +72,13 @@ export class UserServices {
       throw new Error('Username already in use')
     }
 
+    logger.log('info', 'hi')
     const tokenExpires = this.TokenService.generateExpiry()
     const token = this.TokenService.generateToken()
     const tokenHash = this.TokenService.hashToken(token)
+    logger.log('info', 'hi2')
     const passwordHash = await argon2.hash(password)
+    logger.log('info', 'hi3')
 
     try {
       await InsertUser(username, email, passwordHash, tokenHash, tokenExpires)

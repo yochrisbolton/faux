@@ -98,8 +98,17 @@ function watchFileOrFolder (name, type, moveFunction, passAlongObject = {}) {
 }
 
 function compileAndMoveScss (file, allScssFiles = []) {
-  // if were a page type, just compile that file alone
-  if (file.includes('backend/modules/pages')) {
+  if (file.includes('backend/pages/__components') && allScssFiles.length > 0) {
+    /**
+     * If we're not a page we'll assume that we're instead a partial
+     * or something, and since we don't really know what files are
+     * using it (we *could* we just don't _now_) then we'll recompile
+     * all found page SCSS files *just in case*
+     */
+    allScssFiles.forEach(file => {
+      compileAndMoveScss(file)
+    })
+  } else if (file.includes('backend/pages')) { // if were a page type, just compile that file alone
     /**
      * We want to change from:
      * - src/backend/modules/pages/{module}/views/styles/{}.scss
@@ -116,28 +125,18 @@ function compileAndMoveScss (file, allScssFiles = []) {
     }
 
     const updatedFileName = file.replace('src/', '')
-      .replace('pages/', '')
       .replace('backend/', '')
       .replace('views/', '')
       .replace('styles/', '')
-      .replace('modules/', 'styles/')
+      .replace('pages/', 'styles/')
       .replace('.scss', '.css')
+      .replace('__components', 'components')
 
     const exportPath = path.join(path.join(__dirname, '../dist/public/'), updatedFileName)
-    const compiledCSS = sass.compile(path.join(file), { loadPaths: [path.join(__dirname, 'backend/')] })
+    const compiledCSS = sass.compile(path.join(file), { loadPaths: [path.join(__dirname, 'backend/pages')] })
 
     fs.mkdirSync(path.dirname(exportPath), { recursive: true })
     fs.writeFile(`${exportPath}`, minify.minify(compiledCSS.css).css)
-  } else if (file.includes('backend/components') && allScssFiles.length > 0) {
-    /**
-     * If we're not a page we'll assume that we're instead a partial
-     * or something, and since we don't really know what files are
-     * using it (we *could* we just don't _now_) then we'll recompile
-     * all found page SCSS files *just in case*
-     */
-    allScssFiles.forEach(file => {
-      compileAndMoveScss(file)
-    })
   }
 }
 
@@ -157,14 +156,15 @@ function compileAndMoveScss (file, allScssFiles = []) {
  * @param {string} file
  */
 function moveTemplates (file) {
-  if (file.includes('backend/modules/pages')) {
-    const moduleName = file.split('backend/modules/pages')[1]
+  if (file.includes('__components')) {
+    fs.copySync(path.join(__dirname, '/backend/pages/__components/templates'), path.join(__dirname, '../dist/templates/components/'))
+  } else if (file.includes('backend/pages')) {
+    const moduleName = file.split('backend/pages')[1]
       .replace('views', '')
       .replace('templates', '')
+      .replace('__components', 'components')
 
     fs.copySync(path.join(__dirname, file), path.join(__dirname, '../dist/templates/pages/', moduleName))
-  } else if (file.includes('backend/components')) {
-    fs.copySync(path.join(__dirname, '/backend/components/templates'), path.join(__dirname, '../dist/templates/components/'))
   }
 }
 

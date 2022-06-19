@@ -10,13 +10,14 @@ import express, { NextFunction, Request, Response } from 'express'
 import cookieParser from 'cookie-parser'
 import compression from 'compression'
 import path from 'path'
+const eta = require('eta')
 require('express-async-errors')
 
 /**
  * Starts the server
  */
 class RouterServer extends Server {
-  private readonly FRONT_END_MSG = 'Unable to route. If you\'re seeing this message its almost definitely a mistake'
+  private readonly FRONT_END_MSG = 'Unable to route. If you\'re seeing this message its almost definitely a mistake.'
 
   /**
    * Sets up our dependencies
@@ -24,6 +25,7 @@ class RouterServer extends Server {
   constructor () {
     super(true)
 
+    this.app.engine('eta', eta.renderFile)
     this.app.set('view engine', 'eta')
     this.app.set('views', path.join(__dirname, '/'))
     this.app.set('trust proxy', 1)

@@ -1,5 +1,5 @@
-@import "components/styles/utils/variables";
-@import "components/styles/utils/mixins";
+@import "__components/styles/utils/variables";
+@import "__components/styles/utils/mixins";
 
 @mixin _form-shared {
   background: $button-gray;

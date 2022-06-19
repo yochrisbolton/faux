@@ -1,5 +1,7 @@
+@import "__components/styles/partials/forms";
+
 .page-banner {
-  @include reset-header-spacing();
+  @include reset-header-spacing;
 
   color: $text-light-white;
   background: black;
