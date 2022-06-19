@@ -2,10 +2,6 @@
 @import "components/styles/utils/mixins";
 @import "components/styles/utils/variables";
 @import "components/styles/partials/forms";
-@import "components/styles/partials/catalog-grid";
-@import "components/styles/partials/asset-card";
-@import "components/styles/partials/review-report";
-@include card-rating-styles;
 
 .page-admin {
   @include reset-header-spacing;

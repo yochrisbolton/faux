@@ -10,8 +10,6 @@
   <div class="column">
     <div class="sidebar">
       <div class="item active"><a href="/dashboard">Account Information</a></div>
-      <div class="item"><a href="/dashboard/saved/">My Saved Assets</a></div>
-      <div class="item"><a href="/dashboard/reviews/">My Reviewed Assets</a></div>
       <div class="item"><a href="/dashboard/manage/">Manage Information</a></div>
     </div>
   </div>

@@ -2,8 +2,8 @@ import { Controller, Get, Middleware, Post } from '@overnightjs/core'
 import { Request, Response } from 'express'
 import { CheckIfUserExistAndRedirect } from 'utility/middleware/CheckIfUserExistAndRedirect'
 import { DashboardService } from '../services/DashboardService'
-import rateLimit from 'express-rate-limit'
 import { CheckIfUserExistAndSendError } from 'utility/middleware/CheckIfUserExistAndSendError'
+import rateLimit from 'express-rate-limit'
 
 const updateInfoRateLimit = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour window
@@ -29,18 +29,6 @@ const deleteAccountRateLimit = rateLimit({
   message: JSON.stringify({ error: 'Too many requests, please try again later' })
 })
 
-const saveAssetRateLimit = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour window
-  max: 100, // start blocking after x requests
-  message: JSON.stringify({ error: 'You\'re doing that too much, please try again later' })
-})
-
-const viewSavedAndReviewedRateLimit = rateLimit({
-  windowMs: 1000 * 60 * 15, // 15 minutes
-  max: 30, // start blocking after x requests
-  message: JSON.stringify({ error: 'You\'re doing that too much, please try again later' })
-})
-
 @Controller('dashboard')
 export class DashboardController {
   private readonly DashboardService: DashboardService = new DashboardService()
@@ -51,22 +39,10 @@ export class DashboardController {
     return await this.DashboardService.render(req, res)
   }
 
-  @Get('reviews/')
-  @Middleware([viewSavedAndReviewedRateLimit, CheckIfUserExistAndRedirect('/register', false)])
-  private async reviews (req: Request, res: Response): Promise<void> {
-    return await this.DashboardService.renderReviews(req, res)
-  }
-
   @Get('manage/')
   @Middleware([CheckIfUserExistAndRedirect('/register', false)])
   private async manage (req: Request, res: Response): Promise<void> {
     return await this.DashboardService.renderManage(req, res)
-  }
-
-  @Get('saved/')
-  @Middleware([viewSavedAndReviewedRateLimit, CheckIfUserExistAndRedirect('/register', false)])
-  private async saved (req: Request, res: Response): Promise<void> {
-    return await this.DashboardService.renderSaved(req, res)
   }
 
   @Post('update/info')
@@ -79,12 +55,6 @@ export class DashboardController {
   @Middleware([updatePasswordRateLimit, CheckIfUserExistAndRedirect('/register', false)])
   private async updatePassword (req: Request, res: Response): Promise<void> {
     return await this.DashboardService.updatePassword(req, res)
-  }
-
-  @Get('save/:id')
-  @Middleware([saveAssetRateLimit, CheckIfUserExistAndSendError('Unable to save, are you logged in?')])
-  private async saveAsset (req: Request, res: Response): Promise<void> {
-    return await this.DashboardService.saveAsset(req, res)
   }
 
   @Get('download')
