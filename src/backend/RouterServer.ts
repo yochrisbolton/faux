@@ -1,15 +1,15 @@
-import * as controllers from 'modules/controllers.index'
+import * as controllers from 'controllers.index'
+import { TokenServices } from 'pages/__common/authentication/services/TokenServices'
+import { GetDoesUserExistByToken } from 'pages/__common/authentication/models/user/GET/GetDoesUserExistByToken'
+import { GetUserRoleByToken } from 'pages/__common/authentication/models/user/GET/GetUserRoleByToken'
+import { GetPromobarMessage } from 'pages/admin/models/GET/GetPromobarMesasge'
+import { StatusCodes } from 'http-status-codes'
 import { Server } from '@overnightjs/core'
-import express, { NextFunction, Request, Response } from 'express'
 import { logger } from 'utility/logger'
+import express, { NextFunction, Request, Response } from 'express'
+import cookieParser from 'cookie-parser'
 import compression from 'compression'
 import path from 'path'
-import cookieParser from 'cookie-parser'
-import { TokenServices } from 'modules/common/authentication/services/TokenServices'
-import { GetDoesUserExistByToken } from 'modules/common/authentication/models/user/GET/GetDoesUserExistByToken'
-import { GetUserRoleByToken } from 'modules/common/authentication/models/user/GET/GetUserRoleByToken'
-import { GetPromobarMessage } from 'modules/pages/admin/models/GET/GetPromobarMesasge'
-import { StatusCodes } from 'http-status-codes'
 require('express-async-errors')
 
 /**
@@ -64,7 +64,7 @@ class RouterServer extends Server {
     })
 
     this.app.use(function (_req, res, next) {
-      res.setHeader('X-Powered-By', 'Godot Asset Library, an AGPLv3 Software')
+      res.setHeader('X-Powered-By', 'Faux - batteris included TypeScript Express starter')
       next()
     })
 

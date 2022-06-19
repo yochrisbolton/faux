@@ -4,7 +4,7 @@
  * collisions and create a predictable pattern for accessing
  * the methods that we need or want to use
  */
-window.godotLibrary = {
+window.faux = {
   pageMessages: {
     addPageMessage: function (message) {
       const pageMessageContainer = document.querySelector('.page-message .messages')
@@ -31,12 +31,12 @@ window.godotLibrary = {
       }).then(response => {
         if (!response.ok) {
           response.json().then(data => {
-            window.godotLibrary.pageMessages.removeAllPageMessages()
-            window.godotLibrary.pageMessages.addPageMessage(data.error)
+            window.faux.pageMessages.removeAllPageMessages()
+            window.faux.pageMessages.addPageMessage(data.error)
           })
         } else {
-          window.godotLibrary.pageMessages.removeAllPageMessages()
-          window.godotLibrary.pageMessages.addPageMessage('Success! Redirecting...')
+          window.faux.pageMessages.removeAllPageMessages()
+          window.faux.pageMessages.addPageMessage('Success! Redirecting...')
           window.setTimeout(() => {
             location.reload()
           }, 2000)
@@ -64,17 +64,17 @@ window.godotLibrary = {
       }).then(response => {
         if (!response.ok) {
           response.json().then(data => {
-            window.godotLibrary.pageMessages.removeAllPageMessages()
-            window.godotLibrary.pageMessages.addPageMessage(data.error)
+            window.faux.pageMessages.removeAllPageMessages()
+            window.faux.pageMessages.addPageMessage(data.error)
             setTimeout(() => {
-              window.godotLibrary.pageMessages.removeAllPageMessages()
+              window.faux.pageMessages.removeAllPageMessages()
             }, 5000)
           })
         } else {
-          window.godotLibrary.pageMessages.removeAllPageMessages()
-          window.godotLibrary.pageMessages.addPageMessage(message)
+          window.faux.pageMessages.removeAllPageMessages()
+          window.faux.pageMessages.addPageMessage(message)
           setTimeout(() => {
-            window.godotLibrary.pageMessages.removeAllPageMessages()
+            window.faux.pageMessages.removeAllPageMessages()
           }, 5000)
         }
       })

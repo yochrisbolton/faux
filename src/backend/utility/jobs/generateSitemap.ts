@@ -1,6 +1,6 @@
 import { CronJob } from 'cron'
-import { GetAllCategoriesAndTheirAssetCount } from 'modules/pages/homepage/models/GET/GetAllCategoriesAndTheirAssetCount'
-import { GetAssetsWithoutQuery } from 'modules/pages/search/models/GET/GetAssetsWithoutQuery'
+import { GetAllCategoriesAndTheirAssetCount } from 'pages/homepage/models/GET/GetAllCategoriesAndTheirAssetCount'
+import { GetAssetsWithoutQuery } from 'pages/search/models/GET/GetAssetsWithoutQuery'
 import { logger } from 'utility/logger'
 import { createWriteStream } from 'fs'
 import { SitemapStream } from 'sitemap'

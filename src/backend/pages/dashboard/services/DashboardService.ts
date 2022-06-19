@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import { GetDoesUsernameExist } from 'modules/common/authentication/models/user/GET/GetDoesUsernameExist'
-import { GetIsUsernameReserved } from 'modules/common/authentication/models/user/GET/GetIsUsernameReserved'
-import { GetPasswordHashByToken } from 'modules/common/authentication/models/user/GET/GetPasswordHashByToken'
-import { GetUserIdByToken } from 'modules/common/authentication/models/user/GET/GetUserIdByToken'
-import { UpdatePasswordHashByToken } from 'modules/common/authentication/models/user/UPDATE/UpdatePasswordHashByToken'
-import { UserServices } from 'modules/common/authentication/services/UserServices'
+import { GetDoesUsernameExist } from 'pages/__common/authentication/models/user/GET/GetDoesUsernameExist'
+import { GetIsUsernameReserved } from 'pages/__common/authentication/models/user/GET/GetIsUsernameReserved'
+import { GetPasswordHashByToken } from '__common/authentication/models/user/GET/GetPasswordHashByToken'
+import { GetUserIdByToken } from '__common/authentication/models/user/GET/GetUserIdByToken'
+import { UpdatePasswordHashByToken } from '__common/authentication/models/user/UPDATE/UpdatePasswordHashByToken'
+import { UserServices } from 'common/authentication/services/UserServices'
 import { GetDoesPostExistById } from 'modules/pages/asset/models/GET/GetDoesPostExistById'
 import { GetUserAssetsFromQuery } from '../models/GET/GetUserAssetsFromQuery'
 import { GetUserSavedAssets } from '../models/GET/GetUserSavedAssets'
@@ -21,7 +21,7 @@ import { UpdatePositiveVotesRemoveOne } from 'modules/pages/asset/models/UPDATE/
 import { UpdateNegativeVotesRemoveOne } from 'modules/pages/asset/models/UPDATE/UpdateNegativeVotesRemoveOne'
 import { DeleteAllUserComments } from '../models/DELETE/DeleteAllUserComments copy'
 import { DeleteUserByUserId } from '../models/DELETE/DeleteUserById'
-import { GetUsernameByToken } from 'modules/common/authentication/models/user/GET/GetUsernameByToken'
+import { GetUsernameByToken } from '__common/authentication/models/user/GET/GetUsernameByToken'
 
 export class DashboardService {
   public async render (req: Request, res: Response): Promise<void> {
