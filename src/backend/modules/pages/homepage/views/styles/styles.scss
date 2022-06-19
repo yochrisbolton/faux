@@ -1,0 +1,76 @@
+@import "components/styles/layouts/promobar-nav-body-footer";
+@import "components/styles/partials/asset-card";
+@import "components/styles/partials/category-card-featured";
+@import "components/styles/partials/category-card";
+
+@include card-rating-styles;
+
+.page-home {
+  h2 {
+    font-family: "Inter";
+    font-weight: 700;
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 13px;
+  }
+
+  .three-wide {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 20px;
+    row-gap: 20px;
+
+    @include tablet-styles {
+      grid-template-columns: 1fr 1fr;
+
+      .asset-card,
+      .category-card-featured {
+        &:last-of-type {
+          display: none;
+        }
+      }
+    }
+
+    @include mobile-styles {
+      grid-template-columns: 1fr;
+
+      .asset-card,
+      .category-card-featured {
+        &:not(:first-of-type) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .five-wide {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    column-gap: 20px;
+    row-gap: 20px;
+
+    .asset-card {
+      &:last-of-type {
+        display: none;
+      }
+    }
+
+    @include small-desktop-styles {
+      grid-template-columns: 1fr 1fr 1fr;
+
+      .asset-card {
+        &:last-of-type {
+          display: flex;
+        }
+      }
+    }
+
+    @include mobile-styles {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @include small-mobile-styles {
+      grid-template-columns: 1fr;
+    }
+  }
+}

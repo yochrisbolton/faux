@@ -1,0 +1,106 @@
+<section class="site-info">
+  <div class="contents">
+    <div class="about">
+      <h2>About Godot Asset Library</h2>
+      <p>Godot Asset Library is a free and Open Source asset library for the Godot Engine maintained by the Godot Asset
+        Library community on GitHub. Explore assets created by the Godot Engine
+        community,
+        and
+        kickstart your development with quality assets from Godot Asset Library</p>
+    </div>
+    <div class="trust-badges">
+      <div class="trust-badge">
+        <div class="icon">
+          <span class="iconify" data-icon="ri:open-source-fill"></span>
+        </div>
+        <div class="contents">
+          <h2>Open Source</h2>
+          <span>Released under the AGPLv3 license</span>
+        </div>
+      </div>
+      <div class="trust-badge">
+        <div class="icon">
+          <span class="iconify" data-icon="fluent:plug-disconnected-24-filled"></span>
+        </div>
+        <div class="contents">
+          <h2>Plug and Play</h2>
+          <span>Browse assets directly from Godot</span>
+        </div>
+      </div>
+      <div class="trust-badge">
+        <div class="icon">
+          <span class="iconify hq" data-icon="ic:baseline-high-quality"></span>
+        </div>
+        <div class="contents">
+          <h2>Community Driven</h2>
+          <span>Created by developers for developers</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="content">
+    <section class="column">
+      <h2 class="header">
+        Site Terms
+      </h2>
+      <ul>
+        <li><a href="/terms/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/terms/terms-of-service">Terms of Service</a></li>
+        <li><a href="/terms/cookie-policy">Cookie Policy</a></li>
+        <li><a href="/terms/acceptable-use-policy">Acceptable Use Policy</a></li>
+      </ul>
+    </section>
+    <section class="column">
+      <h2 class="header">
+        Useful Links
+      </h2>
+      <ul>
+        <li class="gold"><a href="https://patreon.com/godotengine" target="_blank">Godot Patreon</a></li>
+        <li><a href="https://godotengine.org" target="_blank">Godot Website</a></li>
+        <li><a href="https://github.com/LittleMouseGames/GodotAssetLibrary" target="_blank">Source Code</a></li>
+      </ul>
+    </section>
+    <section class="column">
+      <h2 class="header">
+        My Account
+      </h2>
+      <ul>
+        <li><a href="/register">Login or Register</a></li>
+        <li><a href="/dashboard">Account Dashboard</a></li>
+        <li><a href="/dashboard/reviews">My Reviews</a></li>
+        <li><a href="/dashboard/saved">My Saved Assets</a></li>
+        <!-- We'll add this later, probably™️ <li><a href="/create">Upload a New Asset</a></li> -->
+      </ul>
+    </section>
+    <section class="column">
+      <h2 class="header">Contact us</h2>
+      <p>Questions or Concerns? Contact us anytime and we'll get back to you as soon as we can</p>
+      <div class="links">
+        <div class="link">
+          <span class="iconify" data-icon="ic:baseline-email"></span>
+          <a href="mailto:hello@godotassetlibrary.com">
+            <span>Email</span>
+          </a>
+        </div>
+        <div class="link">
+          <span class="iconify" data-icon="fa-brands:twitter-square"></span>
+          <a href="https://twitter.com/LittleMouseDev" target="_blank">
+            <span>Twitter</span>
+          </a>
+        </div>
+      </div>
+      <span class="disclaimer">Godot Asset Library is not affiliated with Godot Engine</span>
+    </section>
+    <section class="brand">
+      <a href="/">
+        <div class="title">Godot Asset Library</div>
+        <div class="subtitle">by <a href="https://twitter.com/LittleMouseDev" target="_blank" class="mouse-link"><span
+              class="strong">LittleMouseGames</span></a></div>
+      </a>
+      <span class="copyright disclaimer">&copy; 2022 Godot Asset Library</span>
+    </section>
+  </div>
+</footer>

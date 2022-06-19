@@ -1,0 +1,20 @@
+<% it.meta = {
+  title: 'View Reports | Godot Asset Library',
+  description: 'Manage Godot Asset Library settings',
+  url: 'https://godotlibrary.com/dashboard/reviews',
+  moduleName: 'admin'
+} %>
+<% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
+
+<section class="page-admin reports">
+  <div class="column">
+    <div class="sidebar">
+      <div class="item"><a href="/admin">Site Settings</a></div>
+      <div class="item"><a href="/admin/featured/">Featured Assets</a></div>
+      <div class="item active"><a href="/admin/reports/">View Reports</a></div>
+    </div>
+  </div>
+  <div class="column">
+    <%~ includeFile('templates/components/partials/catalog-grid.eta', it) %>
+  </div>
+</section>

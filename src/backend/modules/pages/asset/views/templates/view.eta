@@ -1,0 +1,267 @@
+<% 
+  var upvotes = it?.info?.upvotes ?? 0
+  var total = upvotes + it?.info?.downvotes ?? 0
+  var percent = 0
+  var stars = 0
+  
+  if(total !== 0) {
+    percent = Math.round((upvotes / total) * 100).toFixed(2)
+    stars = Math.round((percent + 5) / 10).toFixed(1) / 2
+  }
+%>
+
+<% it.meta = {
+  title: `${it?.info?.title ?? 'Asset'} | Godot Asset Library`,
+  description: it?.info?.quick_description ??  'Find the best Godot Assets on Godot Asset Library',
+  url: `https://godotlibrary.com/asset/${it?.info?.asset_id}/${encodeURI(it?.info?.title.replace(/\s/g, '-')).toLocaleLowerCase()}`,
+  moduleName: 'asset',
+  jsonLd: {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": it?.info?.title,
+    "image": it?.info?.card_banner,
+    "description": it?.info?.quick_description,
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": stars ?? 0,
+      "reviewCount": total ?? 0
+    }
+  }
+} %>
+<% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
+
+<%~ includeFile('templates/components/partials/modal-install.eta', {downloadUrl: it?.info?.download_url}) %>
+<%~ includeFile('templates/components/partials/modal-report.eta') %>
+<%~ includeFile('templates/components/partials/modal-delete.eta') %>
+
+<section class="page-asset">
+  <div class="column">
+    <div class="media">
+      <div class="thumbnails">
+        <% if(it?.info?.previews.length !== 0) { %>
+        <% it?.info?.previews.forEach(preview => { %>
+        <div class="image">
+          <img src="<%= preview.thumbnail %> " alt="" onclick="updatePlayerImage('<%= preview.link %>')">
+        </div>
+        <% }) %>
+        <% } else { %>
+        <div class="image">
+          <img src="<%= it?.info?.icon_url %>" alt="">
+        </div>
+        <% } %>
+      </div>
+      <div class="player">
+        <div class="container">
+          <% if(it?.info?.previews.length !== 0) { %>
+          <img src="<%= it?.info?.previews[0].link %>" alt="">
+          <% } else { %>
+          <img src="<%= it?.info?.icon_url %>" alt="">
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <div class="info">
+      <!-- we'll implement this in the future probably™️ -->
+      <!-- <div class="tabs">
+        <ul>
+          <li class="active">Description from README file</li>
+          <li>Legacy Godot Asset Library Description</li>
+        </ul>
+      </div> -->
+      <div class="details">
+        <div class="section">
+          <h2>Asset Description</h2>
+          <% const descriptionFormatted = it?.info?.description?.replace(/\n/g, '<br>') %>
+          <p><%~ descriptionFormatted %></p>
+        </div>
+
+        <div class="section">
+          <h2>Reviews</h2>
+          <%~ includeFile('templates/components/partials/stars.eta', it) %>
+
+          <div class="reviews">
+            <% if (it?.comments) { %>
+            <% const comments = it?.comments ?? [] %>
+            <% comments.forEach(comment => { %>
+            <div class="review">
+              <div class="header">
+                <span class="headline"><%= comment.headline %></span>
+                <div class="dropdown" onclick="window.godotLibrary.dropdown.showContent(event, this)">
+                  <span class="iconify" data-icon="akar-icons:more-horizontal"></span>
+                  <div class="options">
+                    <div onclick="openReportModal(event, '<%= String(comment.human_id) %>')">Report</div>
+                  </div>
+                </div>
+              </div>
+              <span class="username"><%= comment.username %></span>
+              <span class=" rated">Rated <%= comment.review_type %></span>
+              <div class="review-body">
+                <%= comment.text %>
+              </div>
+            </div>
+            <% }) %>
+            <% } %>
+          </div>
+        </div>
+        <div class="section">
+          <form method="PATCH" action="/asset/review/<%= it?.info?.asset_id %>" class="write-review"
+            onsubmit="window.godotLibrary.formTools.sendFormAjax(event, this)">
+            <h2>Your Rating</h2>
+            <% if(it?._locals?.loggedIn) { %>
+            <label class="rating-select">
+              <input type="radio" name="rating" value="positive" required
+                <%= it?.usersAssetReview?.review_type === 'positive' ? 'checked' : '' %>>
+              <div class="label">
+                <span class="iconify" data-icon="bi:hand-thumbs-up-fill"
+                  <%= it?.usersAssetReview?.review_type === 'false' ? 'checked' : '' %>></span>
+                <span>This addon is good</span>
+              </div>
+            </label>
+            <label class="rating-select">
+              <input type="radio" name="rating" value="negative" required>
+              <div class="label">
+                <span class="iconify" data-icon="bi:hand-thumbs-down-fill"></span>
+                <span>This addon is not good</span>
+              </div>
+            </label>
+            <div class="requirement">Headline must be at least 3 characters but not more than 50</div>
+            <div class="input-container">
+              <input name="asset_review_headline" class="input" id="asset-review-headline" type="text" placeholder=" "
+                value="<%= it?.usersAssetReview?.headline ? it?.usersAssetReview?.headline : '' %>">
+              <label for="asset-review-headline" class="placeholder">Headline (optional)</label>
+            </div>
+            <div class="requirement">Review must be at least 5 characters but not more than 500</div>
+            <div class="input-container">
+              <textarea name="asset_review" class="input" id="asset-review" type="text"
+                placeholder=" "><%= it?.usersAssetReview?.text ? it?.usersAssetReview?.text : '' %></textarea>
+              <label for="asset-review" class="placeholder">Review (optional)</label>
+            </div>
+            <button type="submit"><%= it?.hasUserReviewedAsset ? 'Update' : 'Submit' %></button>
+            <% } else { %>
+            Please <a href="/register">sign in</a> to add a review
+            <% } %>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="quick-info">
+      <h2>Quick Information</h2>
+      <%~ includeFile('templates/components/partials/stars.eta', it) %>
+      <div class="card">
+        <div class="banner">
+          <div class="badges">
+            <a href="/search/?q=&category=<%= it?.info?.category?.toLocaleLowerCase() %>">
+              <div class="badge badge-blue"><%= it?.info?.category ?? 'ERR' %></div>
+            </a>
+            <a href="/search/?q=&engine=<%= it?.info?.godot_version?.toLocaleLowerCase() %>">
+              <div class="badge badge-purple"><%= it?.info?.godot_version ?? 'ERR' %></div>
+            </a>
+            <div class="dropdown" onclick="window.godotLibrary.dropdown.showContent(event, this)">
+              <span class="iconify" data-icon="akar-icons:more-horizontal"></span>
+              <div class="options">
+                <% if(it?.info?.saved === true) { %>
+                <a href="/dashboard/save/<%= it?.info?.asset_id %>"
+                  onclick="window.godotLibrary.dropdown.callRouteAjax(event, '/dashboard/save/<%= it?.info?.asset_id %>', 'Post successfully removed from saves')">
+                  Unsave
+                </a>
+                <% } else { %>
+                <a href="/dashboard/save/<%= it?.info?.asset_id %>"
+                  onclick="window.godotLibrary.dropdown.callRouteAjax(event, '/dashboard/save/<%= it?.info?.asset_id %>', 'Post successfully added to saves')">
+                  Save
+                </a>
+                <% } %>
+                <% if(it?._locals?.role === 'admin') { %>
+                <% if(it?.info?.featured === true) { %>
+                <a href="/admin/feature-post/<%= it?.info?.asset_id %>"
+                  onclick="window.godotLibrary.dropdown.callRouteAjax(event, '/admin/feature-post/<%= it?.info?.asset_id %>', 'Post successfully featured')">
+                  Unfeature
+                </a>
+                <% } else { %>
+                <a href="/admin/feature-post/<%= it?.info?.asset_id %>"
+                  onclick="window.godotLibrary.dropdown.callRouteAjax(event, '/admin/feature-post/<%= it?.info?.asset_id %>', 'Post successfully featured')">
+                  Feature
+                </a>
+                <% } %>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <% if (!it?.featured) { %>
+          <div class="background">
+            <div class="mask">
+              <img src="<%= it?.info?.card_banner ?? it?.info?.icon_url %>" alt="">
+            </div>
+          </div>
+          <% } %>
+        </div>
+        <div class="body">
+          <div class="top">
+            <div class="icon">
+              <img src="<%= it?.info?.icon_url ?? 'https://avatars.githubusercontent.com/u/42072863?s=200&v=4' %>"
+                alt="">
+            </div>
+            <div class="info">
+              <div class="author"><%= it?.info?.author ?? 'Failed to load'%></div>
+              <div class="title"><%= it?.info?.title ?? 'Unable to load the asset 😿' %></div>
+            </div>
+          </div>
+          <p>
+            <%= it?.info?.quick_description ?? 'For some reason we\'re unable to load this asset information right now' %>
+          <div class="specs">
+            <div class="row">
+              <div class="property">Supported Engine Version</div>
+              <div class="value"><%= it?.info?.godot_version ?? 'Unknown' %></div>
+            </div>
+            <div class="row">
+              <div class="property">Version String</div>
+              <div class="value"><%= it?.info?.version_string ?? 'Unknown' %></div>
+            </div>
+            <div class="row">
+              <div class="property">License Version</div>
+              <div class="value"><%= it?.info?.cost ?? 'Unknown' %></div>
+            </div>
+            <div class="row">
+              <div class="property">Support Level</div>
+              <div class="value"><%= it?.info?.support_level ?? 'Unknown' %></div>
+            </div>
+            <div class="row">
+              <div class="property">Modified Date</div>
+              <div class="value" title="<%= it?.info?.modify_date ?? 'Unknown' %>">
+                <%= it?.info?.modify_date_pretty ?? 'Unknown' %></div>
+            </div>
+            <div class="row">
+              <div class="property">Git URL</div>
+              <div class="value"><a href="<%= it?.info?.browse_url %>" target="_blank">Link to Git URL</a></div>
+            </div>
+            <div class="row">
+              <div class="property">Issue URL</div>
+              <div class="value"><a href="<%= it?.info?.issues_url %>" target="_blank">Link to Issues URL</a>
+              </div>
+            </div>
+          </div>
+          <button onclick="openInstallModal(event)">Add to
+            Project</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function updatePlayerImage(image) {
+      document.querySelector('.player img').src = image;
+    }
+
+    function openInstallModal(event) {
+      document.querySelector('.modal.install').classList.add('active')
+      event.stopPropagation()
+    }
+
+    function openReportModal(event, commentId) {
+      const modalSelector = document.querySelector('.modal.report')
+      modalSelector.classList.add('active')
+      modalSelector.querySelector('form').setAttribute('action', `/asset/report/review/${commentId}`)
+      event.stopPropagation()
+    }
+  </script>
+</section>
