@@ -7,7 +7,7 @@ import { MongoHelper } from 'MongoHelper'
  * @returns {Promise<string>}
  * @throws {error}
  */
-export async function GetPasswordHash (username: string): Promise<any> {
+export async function GetPasswordHash (username: string): Promise<string> {
   const mongo = MongoHelper.getDatabase()
   const operationObject = await mongo.collection('users').findOne({
     username_lowercase: username.toLocaleLowerCase()

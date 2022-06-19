@@ -11,7 +11,6 @@
   @include reset-header-spacing;
   @include sneaky-labels;
   @include disclaimer-styles;
-
   @include mobile-styles {
     margin-top: 0;
     display: flex;
@@ -45,37 +44,10 @@
     }
   }
 
-  &.reports {
-    .results {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-
-    .actions {
-      display: flex;
-      justify-content: space-between;
-
-      button {
-        padding: 10px;
-      }
-    }
-
-    p {
-      &:first-of-type {
-        margin-top: 0px;
-      }
-    }
-  }
-
   margin-top: 20px;
   display: grid;
   column-gap: 60px;
   grid-template-columns: auto 1fr;
-
-  .catalog-grid {
-    button {
-      padding: 0;
-    }
-  }
 
   h2 {
     font-size: 18px;

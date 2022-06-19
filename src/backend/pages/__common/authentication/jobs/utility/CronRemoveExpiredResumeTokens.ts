@@ -9,7 +9,7 @@ export const deleteExpiredTokens = new CronJob('0 0 0 */1 * *', function () {
   logger.log('info', 'Removing expired tokens')
   DeleteExpiredResumeTokens().then(() => {
     logger.log('info', 'Expired resume tokens removed')
-  }).catch(_e => {
-    // ignore
+  }).catch(e => {
+    logger.log('error', 'Error removing expired token', ...[e])
   })
 })

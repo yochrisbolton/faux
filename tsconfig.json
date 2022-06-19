@@ -30,8 +30,5 @@
   "include": [
     "./src/backend/**/*",
     "src/backend/.d.ts"
-  ],
-  "exclude": [
-    "**/node_modules/"
   ]
 }

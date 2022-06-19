@@ -80,5 +80,8 @@
       "src/public"
     ],
     "delay": 0
+  },
+  "engines": {
+    "node": "^18.4.0"
   }
 }

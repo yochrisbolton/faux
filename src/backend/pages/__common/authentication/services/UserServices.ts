@@ -1,13 +1,12 @@
 import * as argon2 from 'argon2'
 import { logger } from 'utility/logger'
-import { InsertUser } from 'common/authentication/models/user/INSERT/InserUser'
+import { InsertUser } from 'pages/__common/authentication/models/user/INSERT/InserUser'
 import { Request } from 'express'
-import { InsertToken } from 'common/authentication/models/user/INSERT/InsertToken'
-import { GetPasswordHash } from 'common/authentication/models/user/GET/GetPasswordHash'
-import { GetUserIdByToken } from 'common/authentication/models/user/GET/GetUserIdByToken'
-import { TokenServices } from 'common/authentication/services/TokenServices'
+import { InsertToken } from 'pages/__common/authentication/models/user/INSERT/InsertToken'
+import { GetPasswordHash } from 'pages/__common/authentication/models/user/GET/GetPasswordHash'
+import { GetUserIdByToken } from 'pages/__common/authentication/models/user/GET/GetUserIdByToken'
+import { TokenServices } from 'pages/__common/authentication/services/TokenServices'
 import { GetDoesUsernameExist } from '../models/user/GET/GetDoesUsernameExist'
-import { GetIsUsernameReserved } from '../models/user/GET/GetIsUsernameReserved'
 import { GetSiteRestrictions } from 'pages/admin/models/GET/GetSiteRestrictions'
 import striptags from 'striptags'
 
@@ -69,10 +68,6 @@ export class UserServices {
 
     if (await GetDoesUsernameExist(username)) {
       throw new Error('Username already in use')
-    }
-
-    if (await GetIsUsernameReserved(username)) {
-      throw new Error('Username is reserved since its used on an asset thats been imported. If this username and those assets belong to you, please reach out so that you can claim this username.')
     }
 
     const tokenExpires = this.TokenService.generateExpiry()

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { GetUserIdByToken } from '__common/authentication/models/user/GET/GetUserIdByToken'
+import { GetUserIdByToken } from 'pages/__common/authentication/models/user/GET/GetUserIdByToken'
 import { TokenServices } from 'pages/__common/authentication/services/TokenServices'
 
 export function CheckIfUserExistAndRedirect (redirect: string, redirectOnUserFound: boolean): any {

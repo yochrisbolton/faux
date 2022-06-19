@@ -1,4 +1,4 @@
-export interface reviews {
+export interface user {
   'human_id': string
   'userId': string
   'assetId': string

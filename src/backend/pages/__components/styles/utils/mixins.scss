@@ -13,7 +13,8 @@
   h2,
   h3,
   h4,
-  h5 {
+  h5,
+  h6 {
     margin: 0;
     padding: 0;
   }
@@ -40,94 +41,6 @@
 
       .strong {
         font-weight: 700;
-      }
-    }
-  }
-}
-
-@mixin asset-featured-button-styles($dark: "true") {
-  height: 31px;
-  border: none;
-  border-radius: 3px;
-  font-family: "Inter";
-  font-weight: 600;
-  width: 63px;
-  cursor: pointer;
-
-  @if $dark == "true" {
-    background: $button-dark-gray;
-    color: $text-light-white;
-  }
-
-  @if $dark == "false" {
-    background: $button-lighter-gray;
-    color: $text-gray-dark;
-  }
-}
-
-@mixin category-featured-button-styles {
-  height: 37px;
-  border: none;
-  border-radius: 3px;
-  font-family: "Poppins";
-  font-weight: 700;
-  width: 170px;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-size: 11px;
-  background: $button-white;
-  color: $text-dark-darker;
-}
-
-@mixin card-rating-styles {
-  %full-star {
-    &:after {
-      content: url("https://api.iconify.design/fa/star.svg?color=%23ffc700&width=15&height=15");
-    }
-  }
-
-  %half-star {
-    &:before {
-      content: url("https://api.iconify.design/fa/star-half.svg?color=%23ffc700&width=15&height=15");
-      margin-right: -7.6px;
-    }
-    &:after {
-      content: url("https://api.iconify.design/fa/star-half.svg?color=lightgray&flip=horizontal&width=15&height=15");
-    }
-  }
-
-  .stars {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    color: #900;
-    $this: &;
-
-    &__item {
-      display: block;
-
-      &::after {
-        content: url("https://api.iconify.design/fa/star.svg?color=lightgray&width=15&height=15");
-      }
-    }
-
-    @for $i from 0 to 6 {
-      &[data-rating="#{$i}"] {
-        #{$this}__item:nth-child(-n + #{$i}) {
-          @extend %full-star;
-        }
-      }
-
-      &[data-rating="#{$i + 0.5}"] {
-        #{$this}__item:nth-child(-n + #{$i}) {
-          @extend %full-star;
-        }
-
-        #{$this}__item:nth-child(#{$i + 1}) {
-          @extend %half-star;
-        }
       }
     }
   }
