@@ -1,7 +1,7 @@
 <% it.meta = {
-  title: `404 | ${process.env.PROJECT_NAME}`,
+  title: `404 | ${process.env.PROJECT_NAME ?? 'faux'}`,
   description: 'Page not found',
-  url: `${process.env.ROOT_ADDRESS}/404`,
+  url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}/404`,
   moduleName: 'lost'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>

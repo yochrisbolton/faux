@@ -13,8 +13,7 @@
     </div>
   </div>
   <div class="column">
-    <form method="POST" action="/admin/update/settings"
-      onsubmit="window.godotLibrary.formTools.sendFormAjax(event, this)">
+    <form method="POST" action="/admin/update/settings" onsubmit="window.faux.formTools.sendFormAjax(event, this)">
       <h2>Site Settings</h2>
       <div class="input-container">
         <input class="input" id="username" type="text" name="message" placeholder=" "

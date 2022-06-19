@@ -64,7 +64,7 @@ class RouterServer extends Server {
     })
 
     this.app.use(function (_req, res, next) {
-      res.setHeader('X-Powered-By', 'Faux - batteris included TypeScript Express starter')
+      res.setHeader('X-Powered-By', 'Faux - batteries included TypeScript Express starter')
       next()
     })
 

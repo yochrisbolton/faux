@@ -1,12 +1,9 @@
 <section class="site-info">
   <div class="contents">
     <div class="about">
-      <h2>About Godot Asset Library</h2>
-      <p>Godot Asset Library is a free and Open Source asset library for the Godot Engine maintained by the Godot Asset
-        Library community on GitHub. Explore assets created by the Godot Engine
-        community,
-        and
-        kickstart your development with quality assets from Godot Asset Library</p>
+      <h2>About Faux</h2>
+      <p>Faux is a batteries included TypeScript Express starter project, to help you hit the ground running in your
+        next TypeScript express project</p>
     </div>
     <div class="trust-badges">
       <div class="trust-badge">
@@ -23,8 +20,8 @@
           <span class="iconify" data-icon="fluent:plug-disconnected-24-filled"></span>
         </div>
         <div class="contents">
-          <h2>Plug and Play</h2>
-          <span>Browse assets directly from Godot</span>
+          <h2>Extendable</h2>
+          <span>Faux follows an easy-to-predict pattern</span>
         </div>
       </div>
       <div class="trust-badge">
@@ -32,8 +29,8 @@
           <span class="iconify hq" data-icon="ic:baseline-high-quality"></span>
         </div>
         <div class="contents">
-          <h2>Community Driven</h2>
-          <span>Created by developers for developers</span>
+          <h2>Battle Tested</h2>
+          <span>Purpose built for fullstack TypeScript Express projects</span>
         </div>
       </div>
     </div>
@@ -58,9 +55,7 @@
         Useful Links
       </h2>
       <ul>
-        <li class="gold"><a href="https://patreon.com/godotengine" target="_blank">Godot Patreon</a></li>
-        <li><a href="https://godotengine.org" target="_blank">Godot Website</a></li>
-        <li><a href="https://github.com/LittleMouseGames/GodotAssetLibrary" target="_blank">Source Code</a></li>
+        <li><a href="https://github.com/yochrisbolton/faux" target="_blank">Source Code</a></li>
       </ul>
     </section>
     <section class="column">
@@ -70,9 +65,6 @@
       <ul>
         <li><a href="/register">Login or Register</a></li>
         <li><a href="/dashboard">Account Dashboard</a></li>
-        <li><a href="/dashboard/reviews">My Reviews</a></li>
-        <li><a href="/dashboard/saved">My Saved Assets</a></li>
-        <!-- We'll add this later, probably™️ <li><a href="/create">Upload a New Asset</a></li> -->
       </ul>
     </section>
     <section class="column">
@@ -81,26 +73,26 @@
       <div class="links">
         <div class="link">
           <span class="iconify" data-icon="ic:baseline-email"></span>
-          <a href="mailto:hello@godotassetlibrary.com">
+          <a href="mailto:hello@faux.com">
             <span>Email</span>
           </a>
         </div>
         <div class="link">
           <span class="iconify" data-icon="fa-brands:twitter-square"></span>
-          <a href="https://twitter.com/LittleMouseDev" target="_blank">
+          <a href="https://twitter.com/" target="_blank">
             <span>Twitter</span>
           </a>
         </div>
       </div>
-      <span class="disclaimer">Godot Asset Library is not affiliated with Godot Engine</span>
     </section>
     <section class="brand">
       <a href="/">
-        <div class="title">Godot Asset Library</div>
-        <div class="subtitle">by <a href="https://twitter.com/LittleMouseDev" target="_blank" class="mouse-link"><span
-              class="strong">LittleMouseGames</span></a></div>
+        <div class="title">Faux</div>
+        <div class="subtitle">by <a href="https://twitter.com/" target="_blank" class="mouse-link">
+            <span class="strong">yochrisbolton</span></a>
+        </div>
       </a>
-      <span class="copyright disclaimer">&copy; 2022 Godot Asset Library</span>
+      <span class="copyright disclaimer">&copy; 2022 Faux</span>
     </section>
   </div>
 </footer>

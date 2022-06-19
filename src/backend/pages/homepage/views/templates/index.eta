@@ -1,6 +1,6 @@
 <% it.meta = {
   title: `Home | ${process.env.PROJECT_NAME ?? 'faux'}`,
-  description: 'Faux - batteries included Typescript Express starter',
+  description: `${process.env.PROJECT_NAME ?? 'faux'} - ${process.env.COMMON_DESC ?? 'batteries included TypeScript Express starter'}`,
   url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}`,
   moduleName: 'homepage'
 } %>

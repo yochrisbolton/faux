@@ -1,7 +1,7 @@
 <% it.meta = {
-  title: 'Register | Godot Asset Library',
-  description: 'Create a new account or sign into an existing account on Godot Asset Library',
-  url: 'https://godotlibrary.com/register',
+  title: `Register | ${process.env.PROJECT_NAME ?? 'faux'}`,
+  description: `Create a new account or sign into an existing account on ${process.env.PROJECT_NAME ?? 'faux'}`,
+  url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}/register`,
   moduleName: 'register'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
@@ -9,7 +9,7 @@
 <section class="page-register">
   <div class="column">
     <h2>Sign in to an existing Account</h2>
-    <form method="POST" action="/api/users/login" onsubmit="window.godotLibrary.formTools.sendFormAjax(event, this)">
+    <form method="POST" action="/api/users/login" onsubmit="window.faux.formTools.sendFormAjax(event, this)">
       <div class="input-container">
         <input class="input" id="login-username" name="username" type="username" placeholder=" " required>
         <label for="login-username" class="placeholder">Username</label>
@@ -28,13 +28,13 @@
   </div>
   <div class="column">
     <h2>Create a new Account</h2>
-    <p>With a free Godot Asset Library account, you can:</p>
+    <p>With a free <%= process.env.PROJECT_NAME ?? 'faux' %> account, you can:</p>
     <ul>
-      <li>Add new assets to the Library</li>
-      <li>Leave ratings and reviews</li>
-      <li>Easily save assets for future lookup</li>
+      <li>Lorem Ipsum</li>
+      <li>Duis condimentum</li>
+      <li>uspendisse potenti</li>
     </ul>
-    <form method="POST" action="/api/users/register" onsubmit="window.godotLibrary.formTools.sendFormAjax(event, this)">
+    <form method="POST" action="/api/users/register" onsubmit="window.faux.formTools.sendFormAjax(event, this)">
       <div class="requirement">Username must be at least 6 characters (but no more than 16)</div>
       <div class="input-container">
         <input class="input" id="register-username" name="username" type="username" placeholder=" " required>
