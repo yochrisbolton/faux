@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
     "esModuleInterop": true,
-    "target": "es6",
+    "target": "esnext",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "outDir": "./dist",
@@ -22,6 +22,7 @@
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": false,
+    "noEmit": true,
     "rootDir": "./src/backend",
     "lib": [
       "es2015.promise"
