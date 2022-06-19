@@ -1,7 +1,7 @@
 <% it.meta = {
-  title: 'Acceptable Use Policy | Godot Asset Library',
-  description: 'Godot Asset Library Acceptable Use Policy',
-  url: 'https://godotlibrary.com/terms/acceptable-use-policy',
+  title: `Acceptable Use Policy | ${process.env.PROJECT_NAME ?? 'faux'}`,
+  description: `${process.env.PROJECT_NAME ?? 'faux'} Acceptable Use Policy`,
+  url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}/terms/acceptable-use-policy`,
   moduleName: 'terms'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
@@ -18,10 +18,11 @@
   <div class="column">
     <h2>Acceptable Use Policy</h2>
     <p>This acceptable use policy covers the products, services, and technologies (collectively referred to as the
-      &ldquo;Products&rdquo;) provided by Godot Asset Library under any ongoing agreement. It’s designed to protect us,
-      our
-      users, and the general Internet community from unethical, irresponsible, and illegal activity. </p>
-    <p>Godot Asset Library users found engaging in activities prohibited by this acceptable use policy can be liable for
+      &ldquo;Products&rdquo;) provided by <%= process.env.PROJECT_NAME ?? 'faux' %> under any ongoing agreement. It’s
+      designed to protect us, our users, and the general Internet community from unethical, irresponsible, and illegal
+      activity. </p>
+    <p><%= process.env.PROJECT_NAME ?? 'faux' %> users found engaging in activities prohibited by this acceptable use
+      policy can be liable for
       service suspension and account termination. In extreme cases, we may be legally obliged to report such users
       to the relevant authorities. </p>
     <p>This policy was last reviewed on 5 February 2022. </p>
@@ -72,10 +73,12 @@
       <li>Any act or omission in violation of consumer protection laws and regulations;</li>
       <li>Any violation of a person’s privacy.</li>
     </ol>
-    <h4>Unauthorized use of Godot Asset Library property</h4>
-    <p>We prohibit the impersonation of Godot Asset Library, the representation of a significant business relationship
+    <h4>Unauthorized use of <%= process.env.PROJECT_NAME ?? 'faux' %> property</h4>
+    <p>We prohibit the impersonation of <%= process.env.PROJECT_NAME ?? 'faux' %>, the representation of a significant
+      business relationship
       with
-      Godot Asset Library, or ownership of any Godot Asset Library property (including our Products and brand) for the
+      <%= process.env.PROJECT_NAME ?? 'faux' %>, or ownership of any <%= process.env.PROJECT_NAME ?? 'faux' %> property
+      (including our Products and brand) for the
       purpose of
       fraudulently gaining service, custom, patronage, or user trust. </p>
     <h3>About this policy</h3>
