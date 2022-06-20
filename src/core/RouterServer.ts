@@ -10,6 +10,7 @@ import express, { NextFunction, Request, Response } from 'express'
 import cookieParser from 'cookie-parser'
 import compression from 'compression'
 import path from 'path'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import eta from 'eta'
 require('express-async-errors')
 
@@ -24,7 +25,6 @@ class RouterServer extends Server {
    */
   constructor () {
     super(true)
-
     this.app.set('view engine', 'eta')
     this.app.set('views', path.join(__dirname, '/'))
     this.app.set('trust proxy', 1)
