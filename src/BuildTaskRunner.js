@@ -98,17 +98,7 @@ function watchFileOrFolder (name, type, moveFunction, passAlongObject = {}) {
 }
 
 function compileAndMoveScss (file, allScssFiles = []) {
-  if (file.includes('core/pages/__components') && allScssFiles.length > 0) {
-    /**
-     * If we're not a page we'll assume that we're instead a partial
-     * or something, and since we don't really know what files are
-     * using it (we *could* we just don't _now_) then we'll recompile
-     * all found page SCSS files *just in case*
-     */
-    allScssFiles.forEach(file => {
-      compileAndMoveScss(file)
-    })
-  } else if (file.includes('core/pages')) { // if were a page type, just compile that file alone
+  if (file.includes('core/pages')) { // if were a page type, just compile that file alone
     /**
      * We want to change from:
      * - src/core/modules/pages/{module}/views/styles/{}.scss
@@ -130,10 +120,9 @@ function compileAndMoveScss (file, allScssFiles = []) {
       .replace('styles/', '')
       .replace('pages/', 'styles/pages/')
       .replace('.scss', '.css')
-      .replace('__components', '../components')
 
     const exportPath = path.join(path.join(__dirname, '../dist/public/'), updatedFileName)
-    const compiledCSS = sass.compile(path.join(file), { loadPaths: [path.join(__dirname, 'core/pages')] })
+    const compiledCSS = sass.compile(path.join(file), { loadPaths: [path.join(__dirname, 'core')] })
 
     fs.mkdirSync(path.dirname(exportPath), { recursive: true })
     fs.writeFile(`${exportPath}`, minify.minify(compiledCSS.css).css)
@@ -156,13 +145,12 @@ function compileAndMoveScss (file, allScssFiles = []) {
  * @param {string} file
  */
 function moveTemplates (file) {
-  if (file.includes('__components')) {
-    fs.copySync(path.join(__dirname, '/core/pages/__components/templates'), path.join(__dirname, '../dist/templates/components/'))
+  if (file.includes('components')) {
+    fs.copySync(path.join(__dirname, '/core/components/templates'), path.join(__dirname, '../dist/templates/components/'))
   } else if (file.includes('core/pages')) {
     const moduleName = file.split('core/pages')[1]
       .replace('views', '')
       .replace('templates', '')
-      .replace('__components', 'components')
 
     fs.copySync(path.join(__dirname, file), path.join(__dirname, '../dist/templates/pages/', moduleName))
   }
