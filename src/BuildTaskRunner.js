@@ -101,7 +101,7 @@ function watchFileOrFolder (name, type, moveFunction, passAlongObject = {}) {
 }
 
 function compileAndMoveScss (file, allScssFiles = []) {
-  if (file.includes('core/components') && allScssFiles.length > 0) {
+  if (file.includes('pages/_components') && allScssFiles.length > 0) {
     /**
      * If we're not a page we'll assume that we're instead a partial
      * or something, and since we don't really know what files are
@@ -111,7 +111,7 @@ function compileAndMoveScss (file, allScssFiles = []) {
     allScssFiles.forEach(file => {
       compileAndMoveScss(file)
     })
-  } else if (file.includes('core/pages')) { // if were a page type, just compile that file alone
+  } else if (file.includes('pages')) { // if were a page type, just compile that file alone
     /**
      * We want to change from:
      * - src/core/modules/pages/{module}/views/styles/{}.scss
@@ -135,7 +135,7 @@ function compileAndMoveScss (file, allScssFiles = []) {
       .replace('.scss', '.css')
 
     const exportPath = path.join(path.join(__dirname, '../dist/public/'), updatedFileName)
-    const compiledCSS = sass.compile(path.join(file), { loadPaths: [path.join(__dirname, 'core')] })
+    const compiledCSS = sass.compile(path.join(file), { loadPaths: [path.join(__dirname, 'pages')] })
 
     fs.mkdirSync(path.dirname(exportPath), { recursive: true })
     fs.writeFile(`${exportPath}`, minify.minify(compiledCSS.css).css)
@@ -158,10 +158,10 @@ function compileAndMoveScss (file, allScssFiles = []) {
  * @param {string} file
  */
 function moveTemplates (file) {
-  if (file.includes('components')) {
-    fs.copySync(path.join(__dirname, '/core/components/templates'), path.join(__dirname, '../dist/templates/components/'))
-  } else if (file.includes('core/pages')) {
-    const moduleName = file.split('core/pages')[1]
+  if (file.includes('_components')) {
+    fs.copySync(path.join(__dirname, '/pages/_components/templates'), path.join(__dirname, '../dist/templates/components/'))
+  } else if (file.includes('pages')) {
+    const moduleName = file.split('pages')[1]
       .replace('views', '')
       .replace('templates', '')
 

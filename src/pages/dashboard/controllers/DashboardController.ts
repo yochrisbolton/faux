@@ -65,7 +65,7 @@ export class DashboardController {
 
   @Get('delete')
   @Middleware([deleteAccountRateLimit, CheckIfUserExistAndSendError('Unable to delete account, are you logged in?')])
-  private async delteAccount (req: Request, res: Response): Promise<void> {
+  private async deleteAccount (req: Request, res: Response): Promise<void> {
     return await this.DashboardService.deleteAccount(req, res)
   }
 }
