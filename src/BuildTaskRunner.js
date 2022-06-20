@@ -3,6 +3,9 @@ const fs = require('fs-extra')
 const path = require('path')
 const glob = require('glob')
 const sass = require('sass')
+const spawn = require('child_process').spawn
+const argv = require('minimist')(process.argv.slice(2))
+let appRunning = false
 
 /**
  * Goals:
@@ -167,3 +170,37 @@ makeDistFolder()
 findScss()
 findTemplates()
 watchPublicFolders()
+
+const webpackArgs = ['node_modules/webpack/bin/webpack.js']
+if (argv?.watch) {
+  webpackArgs.push('--watch')
+}
+
+const webpack = spawn('node', webpackArgs)
+webpack.stdout.on('data', function (data) {
+  process.stdout.write(data)
+  if (data.includes('successfully')) {
+    if (!appRunning) {
+      runApp()
+    }
+  }
+})
+
+webpack.stderr.on('data', function (data) {
+  process.stderr.write(data)
+})
+
+function runApp () {
+  const options = argv?.production ? { ...process.env, NODE_ENV: 'production' } : {}
+  const bundle = spawn('nodemon', ['dist/bundle.js'], options)
+
+  appRunning = true
+
+  bundle.stdout.on('data', function (data) {
+    process.stdout.write(data)
+  })
+
+  bundle.stderr.on('data', function (data) {
+    process.stderr.write(data)
+  })
+}
