@@ -101,7 +101,17 @@ function watchFileOrFolder (name, type, moveFunction, passAlongObject = {}) {
 }
 
 function compileAndMoveScss (file, allScssFiles = []) {
-  if (file.includes('core/pages')) { // if were a page type, just compile that file alone
+  if (file.includes('core/components') && allScssFiles.length > 0) {
+    /**
+     * If we're not a page we'll assume that we're instead a partial
+     * or something, and since we don't really know what files are
+     * using it (we *could* we just don't _now_) then we'll recompile
+     * all found page SCSS files *just in case*
+     */
+    allScssFiles.forEach(file => {
+      compileAndMoveScss(file)
+    })
+  } else if (file.includes('core/pages')) { // if were a page type, just compile that file alone
     /**
      * We want to change from:
      * - src/core/modules/pages/{module}/views/styles/{}.scss
