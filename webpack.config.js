@@ -20,7 +20,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    modules: ['node_modules', path.join(__dirname, './src/core')]
+    modules: ['node_modules', path.join(__dirname, './src')]
   },
   output: {
     filename: 'bundle.js',

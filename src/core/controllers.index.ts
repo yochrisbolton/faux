@@ -1,14 +1,9 @@
 /**
  * API exports
  **/
-export * from './common/authentication/controllers/index'
+export * from './modules/authentication/controllers/index'
 
 /**
  * Pages exports
  **/
-export * from './pages/homepage/controllers/index'
-export * from './pages/register/controllers/index'
-export * from './pages/dashboard/controllers/index'
-export * from './pages/terms/controllers/index'
-export * from './pages/admin/controllers/index'
-export * from './pages/lost/controllers/index'
+export * from '../pages/controllers.index'

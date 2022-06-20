@@ -1,7 +1,7 @@
-import RouterServer from 'RouterServer'
-import { MongoHelper } from 'MongoHelper'
-import { logger } from 'utility/logger'
-import * as cronJobs from 'jobs.index'
+import RouterServer from 'core/RouterServer'
+import { MongoHelper } from 'core/MongoHelper'
+import { logger } from 'core/utils/logger'
+import * as cronJobs from 'core/jobs.index'
 
 // Connect to MongoDB Database
 MongoHelper.getInstance().connect().then(() => {

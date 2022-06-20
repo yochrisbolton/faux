@@ -1,11 +1,14 @@
-import * as controllers from 'controllers.index'
-import { TokenServices } from 'common/authentication/services/TokenServices'
-import { GetDoesUserExistByToken } from 'common/authentication/models/user/GET/GetDoesUserExistByToken'
-import { GetUserRoleByToken } from 'common/authentication/models/user/GET/GetUserRoleByToken'
-import { GetPromobarMessage } from 'pages/admin/models/GET/GetPromobarMesasge'
+/** Faux Core */
+import * as controllers from 'core/controllers.index'
+import { TokenServices } from 'core/modules/authentication/services/TokenServices'
+import { GetDoesUserExistByToken } from 'core/modules/authentication/models/user/GET/GetDoesUserExistByToken'
+import { GetUserRoleByToken } from 'core/modules/authentication/models/user/GET/GetUserRoleByToken'
+import { GetPromobarMessage } from '../pages/admin/models/GET/GetPromobarMesasge'
+import { logger } from 'core/utils/logger'
+
+/** Third Party */
 import { StatusCodes } from 'http-status-codes'
 import { Server } from '@overnightjs/core'
-import { logger } from 'utility/logger'
 import express, { NextFunction, Request, Response } from 'express'
 import cookieParser from 'cookie-parser'
 import compression from 'compression'

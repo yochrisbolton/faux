@@ -1,4 +1,4 @@
 /**
  * API exports
  */
-export * from './common/authentication/jobs/index'
+export * from './modules/authentication/jobs/index'

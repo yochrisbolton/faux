@@ -8,7 +8,7 @@
     "outDir": "./dist",
     "removeComments": true,
     "allowJs": false,
-    "baseUrl": "src/core",
+    "baseUrl": "src",
     "incremental": false,
     "emitDecoratorMetadata": true,
     "declaration": false,
@@ -22,13 +22,14 @@
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": false,
-    "rootDir": "src/core",
+    "rootDir": "src",
     "lib": [
       "es2015.promise"
     ]
   },
   "include": [
     "src/core/**/*",
-    "src/core/.d.ts"
+    "src/core/.d.ts",
+    "src/pages"
   ]
 }

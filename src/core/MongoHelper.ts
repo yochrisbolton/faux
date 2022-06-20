@@ -1,5 +1,5 @@
 import { MongoClient, Db } from 'mongodb'
-import { logger } from 'utility/logger'
+import { logger } from 'core/utils/logger'
 
 export class MongoHelper {
   private static instance: MongoHelper
