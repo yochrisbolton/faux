@@ -9,7 +9,7 @@ MongoHelper.getInstance().connect().then(() => {
   logger.log('info', `Successfull startup at ${startTime}`)
 
   // Start our server
-  const server: RouterServer = new RouterServer()
+  const server: RouterServer = RouterServer.getInstance()
   server.start(3000)
 
   // init all our cron jobs

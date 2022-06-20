@@ -1,7 +1,7 @@
 import { Controller, Get, Middleware } from '@overnightjs/core'
 import { Request, Response } from 'express'
-import { HomepageService } from '../services/HomepageService'
 import rateLimit from 'express-rate-limit'
+import { HomepageService } from '../services/HomepageService'
 
 const fetchHomepageRatelimit = rateLimit({
   windowMs: 1000 * 60 * 15, // 15 minutes

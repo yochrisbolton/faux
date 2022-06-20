@@ -21,7 +21,18 @@ require('express-async-errors')
  * Starts the server
  */
 class RouterServer extends Server {
-  private readonly FRONT_END_MSG = 'Unable to route. If you\'re seeing this message its almost definitely a mistake.'
+  private static instance: RouterServer
+
+  /**
+   * Return our RouterServer instance
+   */
+  public static getInstance (): RouterServer {
+    if (RouterServer.instance == null) {
+      RouterServer.instance = new RouterServer()
+    }
+
+    return RouterServer.instance
+  }
 
   /**
    * Sets up our dependencies
@@ -94,6 +105,10 @@ class RouterServer extends Server {
     super.addControllers(controllerInstances)
   }
 
+  public registerController (controller: any): void {
+    super.addControllers([controller])
+  }
+
   /**
    * Start the express server
    *
@@ -102,7 +117,6 @@ class RouterServer extends Server {
   public start (port: number): void {
     this.app.get('*', (_req: Request, res: Response) => {
       res.redirect('/lost')
-      // res.send(this.FRONT_END_MSG)
     })
 
     this.app.listen(port, () => {
