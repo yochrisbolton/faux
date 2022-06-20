@@ -1,7 +1,7 @@
 <div class="page-banner">
   <div class="contents">
     <h2 class="heading"><%= it?.pageBanner?.title ? it?.pageBanner?.title : process.env.PROJECT_NAME %></h2>
-    <span><%~ it?.pageBanner?.info ? it?.pageBanner?.info : process.env.COMMON_DESC %></span>
+    <span><%~ it?.pageBanner?.info ? it?.pageBanner?.info : process.env.DESCRIPTION %></span>
   </div>
   <div class="background">
     <div class="block"></div>
