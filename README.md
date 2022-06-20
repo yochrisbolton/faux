@@ -34,7 +34,7 @@ npm run lint
 ## Folder Structure
 ```
  src
-  └───backend             # Backend / dynamic 
+  └───core                # Core / dynamic 
     │   RouterServer.ts   # Start our router
     │   MongoHelper.ts    # Our MongoDB helper
     │   start.ts          # App entry point

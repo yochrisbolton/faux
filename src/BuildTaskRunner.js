@@ -98,7 +98,7 @@ function watchFileOrFolder (name, type, moveFunction, passAlongObject = {}) {
 }
 
 function compileAndMoveScss (file, allScssFiles = []) {
-  if (file.includes('backend/pages/__components') && allScssFiles.length > 0) {
+  if (file.includes('core/pages/__components') && allScssFiles.length > 0) {
     /**
      * If we're not a page we'll assume that we're instead a partial
      * or something, and since we don't really know what files are
@@ -108,10 +108,10 @@ function compileAndMoveScss (file, allScssFiles = []) {
     allScssFiles.forEach(file => {
       compileAndMoveScss(file)
     })
-  } else if (file.includes('backend/pages')) { // if were a page type, just compile that file alone
+  } else if (file.includes('core/pages')) { // if were a page type, just compile that file alone
     /**
      * We want to change from:
-     * - src/backend/modules/pages/{module}/views/styles/{}.scss
+     * - src/core/modules/pages/{module}/views/styles/{}.scss
      * To:
      * - (in dist/public) `styles/{page}/*.css
      * Because:
@@ -125,7 +125,7 @@ function compileAndMoveScss (file, allScssFiles = []) {
     }
 
     const updatedFileName = file.replace('src/', '')
-      .replace('backend/', '')
+      .replace('core/', '')
       .replace('views/', '')
       .replace('styles/', '')
       .replace('pages/', 'styles/pages/')
@@ -133,7 +133,7 @@ function compileAndMoveScss (file, allScssFiles = []) {
       .replace('__components', '../components')
 
     const exportPath = path.join(path.join(__dirname, '../dist/public/'), updatedFileName)
-    const compiledCSS = sass.compile(path.join(file), { loadPaths: [path.join(__dirname, 'backend/pages')] })
+    const compiledCSS = sass.compile(path.join(file), { loadPaths: [path.join(__dirname, 'core/pages')] })
 
     fs.mkdirSync(path.dirname(exportPath), { recursive: true })
     fs.writeFile(`${exportPath}`, minify.minify(compiledCSS.css).css)
@@ -149,7 +149,7 @@ function compileAndMoveScss (file, allScssFiles = []) {
  * predictable and only includes the most relevant information
  *
  * Ex, from:
- * - backend/modules/pages/{module}/views/templates/{template}.eta
+ * - core/modules/pages/{module}/views/templates/{template}.eta
  * To:
  * - templates/pages/{module}/{template}.eta
  *
@@ -157,9 +157,9 @@ function compileAndMoveScss (file, allScssFiles = []) {
  */
 function moveTemplates (file) {
   if (file.includes('__components')) {
-    fs.copySync(path.join(__dirname, '/backend/pages/__components/templates'), path.join(__dirname, '../dist/templates/components/'))
-  } else if (file.includes('backend/pages')) {
-    const moduleName = file.split('backend/pages')[1]
+    fs.copySync(path.join(__dirname, '/core/pages/__components/templates'), path.join(__dirname, '../dist/templates/components/'))
+  } else if (file.includes('core/pages')) {
+    const moduleName = file.split('core/pages')[1]
       .replace('views', '')
       .replace('templates', '')
       .replace('__components', 'components')
