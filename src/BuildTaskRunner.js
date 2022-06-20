@@ -65,11 +65,11 @@ function findTemplates () {
 
 function watchPublicFolders () {
   /** on first load */
-  movePublicFolderFile('public')
+  movePublicFolderFile('static')
 
-  watchFileOrFolder('public/images', 'image', movePublicFolderFile, 'image')
-  watchFileOrFolder('public/javascript', 'public javascript', movePublicFolderFile, 'javascript')
-  watchFileOrFolder('public', 'public general', movePublicFolderFile)
+  watchFileOrFolder('static/images', 'static image', movePublicFolderFile, 'image')
+  watchFileOrFolder('static/javascript', 'static javascript', movePublicFolderFile, 'javascript')
+  watchFileOrFolder('static', 'static general', movePublicFolderFile)
 }
 
 /**
@@ -111,7 +111,7 @@ function compileAndMoveScss (file, allScssFiles = []) {
     allScssFiles.forEach(file => {
       compileAndMoveScss(file)
     })
-  } else if (file.includes('pages')) { // if were a page type, just compile that file alone
+  } else if (file.includes('pages') && !file.includes('_components')) { // if were a page type, just compile that file alone
     /**
      * We want to change from:
      * - src/core/modules/pages/{module}/views/styles/{}.scss
