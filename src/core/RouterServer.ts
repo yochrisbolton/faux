@@ -25,8 +25,6 @@ class RouterServer extends Server {
   constructor () {
     super(true)
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    this.app.engine('eta', eta.renderFile)
     this.app.set('view engine', 'eta')
     this.app.set('views', path.join(__dirname, '/'))
     this.app.set('trust proxy', 1)

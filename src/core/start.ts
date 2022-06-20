@@ -20,5 +20,5 @@ MongoHelper.getInstance().connect().then(() => {
     }
   }
 }).catch(error => {
-  logger.log('error', error)
+  logger.log('error', 'Error durring startup', error)
 })
