@@ -2,7 +2,7 @@
   title: `404 | ${process.env.PROJECT_NAME ?? 'faux'}`,
   description: 'Page not found',
   url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}/404`,
-  moduleName: 'lost'
+  pageName: 'lost'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
 

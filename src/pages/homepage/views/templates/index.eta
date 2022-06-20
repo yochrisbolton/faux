@@ -2,7 +2,7 @@
   title: `Home | ${process.env.PROJECT_NAME ?? 'faux'}`,
   description: `${process.env.PROJECT_NAME ?? 'faux'} - ${process.env.COMMON_DESCRIPTION ?? 'batteries included TypeScript Express starter'}`,
   url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}`,
-  moduleName: 'homepage'
+  pageName: 'homepage'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
 

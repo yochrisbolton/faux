@@ -2,7 +2,7 @@
   title: `Register | ${process.env.PROJECT_NAME ?? 'faux'}`,
   description: `Create a new account or sign into an existing account on ${process.env.PROJECT_NAME ?? 'faux'}`,
   url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}/register`,
-  moduleName: 'register'
+  pageName: 'register'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
 

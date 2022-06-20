@@ -2,7 +2,7 @@
   title: `Privacy Policy | ${process.env.PROJECT_NAME ?? 'faux'}`,
   description: `${process.env.PROJECT_NAME ?? 'faux'} Privacy Policy`,
   url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}/terms/privacy-policy`,
-  moduleName: 'terms'
+  pageName: 'terms'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
 

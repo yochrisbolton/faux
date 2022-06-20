@@ -2,7 +2,7 @@
   title: `Cookie Policy | ${process.env.PROJECT_NAME ?? 'faux'}`,
   description: `${process.env.PROJECT_NAME ?? 'faux'} Cookie Policy`,
   url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}/terms/cookie-policy`,
-  moduleName: 'terms'
+  pageName: 'terms'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
 

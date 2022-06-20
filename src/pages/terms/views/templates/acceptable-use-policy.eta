@@ -2,7 +2,7 @@
   title: `Acceptable Use Policy | ${process.env.PROJECT_NAME ?? 'faux'}`,
   description: `${process.env.PROJECT_NAME ?? 'faux'} Acceptable Use Policy`,
   url: `${process.env.ROOT_ADDRESS ?? 'https://faux.com'}/terms/acceptable-use-policy`,
-  moduleName: 'terms'
+  pageName: 'terms'
 } %>
 <% layout('templates/components/layouts/promobar-nav-body-footer.eta') %>
 
