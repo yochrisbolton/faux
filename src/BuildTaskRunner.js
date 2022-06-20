@@ -128,9 +128,9 @@ function compileAndMoveScss (file, allScssFiles = []) {
       .replace('backend/', '')
       .replace('views/', '')
       .replace('styles/', '')
-      .replace('pages/', 'styles/')
+      .replace('pages/', 'styles/pages/')
       .replace('.scss', '.css')
-      .replace('__components', 'components')
+      .replace('__components', '../components')
 
     const exportPath = path.join(path.join(__dirname, '../dist/public/'), updatedFileName)
     const compiledCSS = sass.compile(path.join(file), { loadPaths: [path.join(__dirname, 'backend/pages')] })
