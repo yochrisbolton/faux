@@ -3,7 +3,6 @@ import * as controllers from 'core/controllers.index'
 import { TokenServices } from 'core/modules/authentication/services/TokenServices'
 import { GetDoesUserExistByToken } from 'core/modules/authentication/models/user/GET/GetDoesUserExistByToken'
 import { GetUserRoleByToken } from 'core/modules/authentication/models/user/GET/GetUserRoleByToken'
-import { GetPromobarMessage } from '../pages/admin/models/GET/GetPromobarMesasge'
 import { logger } from 'core/utils/logger'
 
 /** Third Party */
@@ -67,12 +66,6 @@ class RouterServer extends Server {
         } catch (e) {
           // ignore
         }
-      }
-
-      try {
-        res.locals.promobarMessage = await GetPromobarMessage()
-      } catch (e) {
-        // ignore
       }
 
       next()
