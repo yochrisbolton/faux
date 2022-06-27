@@ -1,14 +1,53 @@
-# Faux - batteris included TypeScript Express starter
-
-**What is this:**
-An Open Source (AGPLv3) node typescript framework / starter project, with batteries included
+# Faux - batteries included TypeScript Express starter
 
 Features:
 * Model-View-Service-Controller pattern
 * Password and token authentication
 * MongoDB singleton
 * Backend template rendering via eta.js
-  
+
+## Getting Started
+> Neat, but how do I use this?
+
+Neat indeed, and getting started is pretty easy! Each page is treated as its own module - if you take a peak into `src/core/pages` you can see some examples of what that looks like. 
+
+These pages follow the below file structure:
+```
+page
+  └─── controllers      # controllers for the page
+  └─── jobs             # CRON jobs for the page
+  └─── models           # database models for the page 
+  └─── services         # the service contracts for the page 
+  └─── views            # root frontend folder for the page
+      │─── styles       # scss files for the page
+      │─── tempaltes    # eta templates for the page
+```
+
+The rough flow of how things look is:
+- client makes a request
+- router looks for controller matching request
+- controller calls service contract which executes our business logic
+- service contract optionally calls any models it needs to prepare data
+- service contract renders our view with our data and sends it back to the controller
+- controller sends back response 
+- client sees page 😎
+
+The goal is to have a largely decoupled core that can then be abstracted out into these page modules, to keep things clean and predictable
+
+### If pages are isolated modules, how do shared resources work?
+The way we have things setup right now is that any shared module should be added to the `core` as a `core module`. An example of this is our `authentication` module, which handles all things authentication - including:
+- controllers we can call (login, register, token auth, etc)
+- services it needs (ex for token generation)
+- models
+- etc
+
+If you need something that will be used for multiple different pages, ideally it too gets added as a `core module` and has a generic access method so that it isn't too coupled to the project
+
+### How does frontend compilation work?
+If you take a peak at our `BuildTaskRunner`, you can see how we find all SCSS, static content, and ETA templates and compile them. The TL;DR is that we `glob` and `watch` folders and anytime we detect a change, we compile it out and ship it to `dist/` folder
+
+If you run via `npm run devel` or via the docker image, this is handled for you - so you just need to run that to hit the ground running
+
 ## Running
 ### Docker based envrionment
 Run:
@@ -30,41 +69,6 @@ For linting:
 ```
 npm run lint
 ```
-
-## Folder Structure
-```
- src
-  └───core                # Core / dynamic 
-    │   RouterServer.ts   # Start our router
-    │   MongoHelper.ts    # Our MongoDB helper
-    │   start.ts          # App entry point
-    └───components        # Reusuable eta.js templates
-    └───modules           # Each site module (ex, admin area, blog area, etc) 
-      └─── ModuleName     # Module Example
-        │───controllers   # Module controllers
-        │───jobs          # Cron / scheduled jobs
-        │───models        # Database models
-        │───services      # All the business logic
-        │───views         # Store the Views for the module (eta.js templates)
-    └───utility           # All our utility classes, like loggers
-  └───frontend            # Frontend assets (ex pre-compiled or static)
-
-```
-
-**Controllers**
-Controllers do not handle business logic. They interpret routes, call our services and return the data
-
-**Services**
-Services handle all our buisness logic
-
-**Models**
-Our models for reading and writing data to the database (MongoDB by default)
-
-**Jobs**
-Spot to put cron jobs or other scheduled jobs
-
-**Views**
-Our ETA templates and relevant SCSS for the page
 
 ## Style guide
 All functions will have a `DocBlock` to describe its purpose
