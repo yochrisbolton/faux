@@ -4,7 +4,8 @@ import { MongoHelper } from 'core/MongoHelper'
  * Get email and username
  *
  * @param {string} token
- * @returns
+ * @returns {Promise<any>} the user object
+ * @throws {error} if user not found
  */
 export async function GetUserInfoByToken (token: string): Promise<any> {
   const mongo = MongoHelper.getDatabase()

@@ -4,7 +4,7 @@ import { GetPromobarMessage } from '../models/GET/GetPromobarMesasge'
 import RouterServer from 'core/RouterServer'
 
 /**
- * Check resume tokens everyday and remove expired
+ * Update the promobar message from the DB
  */
 export const UpdatePromobarMessage = new CronJob('*/5 * * * *', function () {
   logger.log('info', 'Updating promobar message')

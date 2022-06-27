@@ -6,7 +6,8 @@ import { MongoHelper } from 'core/MongoHelper'
  * @param {string} token
  * @param {string} username
  * @param {string} email
- * @returns
+ * @returns any
+ * @throws {error} if failed to update
  */
 export async function UpdateUserInformtaion (token: string, username: string, email: string): Promise<any> {
   const mongo = MongoHelper.getDatabase()

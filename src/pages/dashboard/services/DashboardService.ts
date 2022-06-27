@@ -23,6 +23,13 @@ export class DashboardService {
     return res.render('templates/pages/dashboard/dashboard', { info: info, pageBanner: pageBanner })
   }
 
+  /**
+   * Render our page
+   *
+   * @param _req
+   * @param res
+   * @returns
+   */
   public async renderManage (_req: Request, res: Response): Promise<void> {
     const pageBanner = {
       title: 'Manage Information',
@@ -32,6 +39,13 @@ export class DashboardService {
     return res.render('templates/pages/dashboard/manage', { pageBanner: pageBanner })
   }
 
+  /**
+   * Update our user information (username, email, etc)
+   *
+   * @param req
+   * @param res
+   * @returns
+   */
   public async updateInfo (req: Request, res: Response): Promise<void> {
     const username = striptags(req.body.username ?? '')
     const email = striptags(req.body.email ?? '')
@@ -57,6 +71,13 @@ export class DashboardService {
     return res.render('templates/pages/dashboard/dashboard', { info: info })
   }
 
+  /**
+   * Update password (once checks passed)
+   *
+   * @param req Request object
+   * @param res Response object
+   * @returns
+   */
   public async updatePassword (req: Request, res: Response): Promise<void> {
     const currentPassword = striptags(req.body['password-current'] ?? '')
     const newPassword = striptags(req.body['new-password'] ?? '')
@@ -91,6 +112,12 @@ export class DashboardService {
     return res.render('templates/pages/dashboard/dashboard', { info: info })
   }
 
+  /**
+   * Fetches all our information
+   *
+   * @param req Request object
+   * @param res Response object
+   */
   public async downloadInformation (req: Request, res: Response): Promise<void> {
     const hashedToken = striptags(req.body.hashedToken ?? '')
 
@@ -110,6 +137,12 @@ export class DashboardService {
     res.end(downloadJson, 'ascii')
   }
 
+  /**
+   * Deletes our user account
+   *
+   * @param req Request object
+   * @param res Response object
+   */
   public async deleteAccount (req: Request, res: Response): Promise<void> {
     const hashedToken = striptags(req.body.hashedToken ?? '')
 
