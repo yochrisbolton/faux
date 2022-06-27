@@ -1,5 +1,7 @@
 # Faux - batteries included TypeScript Express starter
 
+> ⚠️ This project is still very much Work in Progress 🚧
+
 Features:
 * Model-View-Service-Controller pattern
 * Password and token authentication
