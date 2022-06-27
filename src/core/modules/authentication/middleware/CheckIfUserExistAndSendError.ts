@@ -3,6 +3,12 @@ import { StatusCodes } from 'http-status-codes'
 import { GetDoesUserExistByToken } from 'core/modules/authentication/models/user/GET/GetDoesUserExistByToken'
 import { TokenServices } from 'core/modules/authentication/services/TokenServices'
 
+/**
+ * Check if user exists and send error if not
+ *
+ * @param {string} error error message to print if not found
+ * @returns
+ */
 export function CheckIfUserExistAndSendError (error: string = 'User not found'): any {
   return async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const authToken = req.cookies['auth-token']

@@ -5,6 +5,7 @@ import { MongoHelper } from 'core/MongoHelper'
  *
  * @param {string} id human_id
  * @returns {Promise<string>}
+ * @throws {error} if user not found
  */
 export async function GetUsernameById (id: string): Promise<string> {
   const mongo = MongoHelper.getDatabase()

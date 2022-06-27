@@ -2,6 +2,13 @@ import { NextFunction, Request, Response } from 'express'
 import { GetUserIdByToken } from 'core/modules/authentication/models/user/GET/GetUserIdByToken'
 import { TokenServices } from 'core/modules/authentication/services/TokenServices'
 
+/**
+ * Check if user exists and redirect if not
+ *
+ * @param redirect redirect to this page if not found
+ * @param redirectOnUserFound do we want to redirect if user found?
+ * @returns
+ */
 export function CheckIfUserExistAndRedirect (redirect: string, redirectOnUserFound: boolean): any {
   return (req: Request, res: Response, next: NextFunction) => {
     const authToken = req.cookies['auth-token']

@@ -5,6 +5,7 @@ import { MongoHelper } from 'core/MongoHelper'
  *
  * @param {string} token hashed token
  * @returns {Promise<string>}
+ * @throws {error} if user not found
  */
 export async function GetUserRoleByToken (token: string): Promise<string> {
   const mongo = MongoHelper.getDatabase()

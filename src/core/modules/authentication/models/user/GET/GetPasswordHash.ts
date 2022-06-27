@@ -5,7 +5,7 @@ import { MongoHelper } from 'core/MongoHelper'
  *
  * @param {string} username username
  * @returns {Promise<string>}
- * @throws {error}
+ * @throws {error} if user not found
  */
 export async function GetPasswordHash (username: string): Promise<string> {
   const mongo = MongoHelper.getDatabase()
