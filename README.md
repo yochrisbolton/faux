@@ -35,6 +35,7 @@ The rough flow of how things look is:
 The goal is to have a largely decoupled core that can then be abstracted out into these page modules, to keep things clean and predictable
 
 ### If pages are isolated modules, how do shared resources work?
+#### **Backend**
 The way we have things setup right now is that any shared module should be added to the `core` as a `core module`. An example of this is our `authentication` module, which handles all things authentication - including:
 - controllers we can call (login, register, token auth, etc)
 - services it needs (ex for token generation)
@@ -42,6 +43,9 @@ The way we have things setup right now is that any shared module should be added
 - etc
 
 If you need something that will be used for multiple different pages, ideally it too gets added as a `core module` and has a generic access method so that it isn't too coupled to the project
+
+#### **Frontend**
+Shared frontend components, ex generic templates or styles, can be added to the root `pages/_components` directory
 
 ### How does frontend compilation work?
 If you take a peak at our `BuildTaskRunner`, you can see how we find all SCSS, static content, and ETA templates and compile them. The TL;DR is that we `glob` and `watch` folders and anytime we detect a change, we compile it out and ship it to `dist/` folder
