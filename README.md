@@ -52,6 +52,11 @@ If you take a peak at our `BuildTaskRunner`, you can see how we find all SCSS, s
 
 If you run via `npm run devel` or via the docker image, this is handled for you - so you just need to run that to hit the ground running
 
+### Projects that use this (or a version of it)
+- Godot Asset Library; AGPLv3 Godot Asset Library frontend alternative (uses precursor)
+  - [https://github.com/LittleMouseGames/GodotAssetLibrary](https://github.com/LittleMouseGames/GodotAssetLibrary)
+  - [https://godotassetlibrary.com](https://godotassetlibrary.com)
+
 ## Running
 ### Docker based envrionment
 Run:
