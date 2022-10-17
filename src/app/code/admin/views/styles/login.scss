@@ -1,0 +1,70 @@
+@import "code/admin/views/layouts/login/styles";
+@import "components/utils/mixins";
+@import "components/utils/variables";
+@import "components/utils/forms";
+@import "./components/buttons";
+
+body {
+  flex-direction: column;
+}
+
+.main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.login {
+  @include sneaky-labels;
+  @include reset-header-spacing;
+  @include admin-button($full: true);
+
+  padding: 20px;
+  border: 1px solid #2d2f31;
+  border-radius: 3px;
+  padding: 20px;
+  border: 1px solid #2d2f31;
+  border-radius: 3px;
+  margin: auto;
+
+  input,
+  textarea {
+    @include admin-input;
+    max-width: 100%;
+    min-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 5px;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+
+  .field {
+    margin-bottom: 20px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      margin-left: 15px;
+    }
+
+    .post {
+      background-color: #055efb;
+    }
+  }
+
+  .toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}

@@ -1,4 +1,4 @@
-import { MongoHelper } from 'core/MongoHelper'
+import { MongoDriver } from 'core/database/Mongo/MongoDriver'
 
 /**
  * Checks if a user exists given a hashed token
@@ -7,7 +7,7 @@ import { MongoHelper } from 'core/MongoHelper'
  * @returns {Promise<boolean>}
  */
 export async function GetDoesUserExistByToken (token: string): Promise<boolean> {
-  const mongo = MongoHelper.getDatabase()
+  const mongo = MongoDriver.getDatabase()
   const operationObject = await mongo.collection('users').findOne({
     'resume_tokens.token': token
   }, {

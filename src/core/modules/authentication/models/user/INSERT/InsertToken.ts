@@ -1,4 +1,4 @@
-import { MongoHelper } from 'core/MongoHelper'
+import { MongoDriver } from 'core/database/Mongo/MongoDriver'
 import { Db } from 'mongodb'
 
 /**
@@ -10,7 +10,7 @@ import { Db } from 'mongodb'
  * @returns
  */
 export async function InsertToken (username: string, token: string, tokenExpires: Date): Promise<any> {
-  const mongo: Db = MongoHelper.getDatabase()
+  const mongo: Db = MongoDriver.getDatabase()
   const userObj = await mongo.collection('users').updateOne({ username: username }, {
     $push: {
       resume_tokens: {

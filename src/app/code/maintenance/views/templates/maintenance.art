@@ -1,0 +1,16 @@
+<% $data.meta = {
+  title: 'Unsupported Error',
+  description: 'We encountered an error trying to do that action, but don\'t worry - we\'re on it!',
+  url: 'localhost:8080/404',
+  moduleName: 'maintenance'
+} %>
+<% extend('templates/pages/maintenance/layouts/content-only.art') %>
+
+{{#block 'content'}}
+  <section class="page-maintenance">
+    <div class="center">
+      <h2>Unsupported Error</h2>
+      <p>We encountered an error trying to do that action, but don't worry - we're on it!</p>
+    </div>
+  </section>
+{{/block}}

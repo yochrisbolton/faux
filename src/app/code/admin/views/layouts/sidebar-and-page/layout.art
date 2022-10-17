@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title><%= $data.meta.title %></title>
+  <script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap"
+    media="print" onload="this.media='all'">
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Inter:wght@500;600;700&family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet">
+  </noscript>
+  <link rel="stylesheet" href="https://unpkg.com/bytemd/dist/index.css" />
+  <link rel="stylesheet" href="https://unpkg.com/github-markdown-css" />
+  <script>
+    let process = {}
+    process.env = {}
+    process.env.NODE_ENV = 'production'
+  </script>
+  <script src="https://unpkg.com/bytemd"></script>
+  <script src="https://unpkg.com/@bytemd/plugin-gfm"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/css/css.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/ayu-mirage.min.css" />
+</head>
+
+<body>
+  <% var pageCss = $imports.fetchCss('admin') %>
+  {{#if pageCss}}
+    {{@pageCss}}
+  {{/if}}
+
+  <% var layoutJs = $imports.fetchJs('pages/admin/layouts/sidebar-and-page') %>
+  {{#if layoutJs}}
+    {{@layoutJs}}
+  {{/if}}
+
+  <% var driverJs = $imports.fetchJs('pages/admin/layouts/sidebar-and-page', 'driver.js') %>
+  {{#if driverJs}}
+    {{@driverJs}}
+  {{/if}}
+
+  <section class="sidebar">
+    <a href="/admin" class="brand">
+      <div class="name">🦖 Faux</div>
+      <div class="subtitle">Expand your reach</div>
+    </a>
+    <div class="items">
+      <div class="top">
+        <a href="/admin" class="item {{#if $data.meta.active == 'dashboard'}}active{{/if}}">
+          <span class="iconify" data-icon="ant-design:home-filled"></span>
+          <span>Dashboard</span>
+        </a>
+        <div class="spaced">
+          <a href="/admin/posts" class="item {{#if $data.meta.active == 'post-list'}}active{{/if}}">
+            <span class="iconify" data-icon="ci:list-checklist"></span>
+            <span>All Articles</span>
+          </a>
+          <a href="/admin/sites" class="item {{#if $data.meta.active == 'site-list'}}active{{/if}}">
+            <span class="iconify" data-icon="ic:baseline-topic"></span>
+            <span>Topic Sites</span>
+          </a>
+          <div class="item {{#if $data.meta.active == 'category-list'}}active{{/if}}">
+            <span class="iconify" data-icon="bxs:category"></span>
+            <span>Category Sites</span>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="item">
+          <span class="iconify" data-icon="bxs:cog"></span>
+          <span>Settings</span>
+        </div>
+        <div class="item">
+          <span class="iconify" data-icon="majesticons:door-exit"></span>
+          <span>Logout</span>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.querySelectorAll('.item').forEach(item => {
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.item').forEach(item => {
+            item.classList.remove('active')
+          })
+          item.classList.add('active')
+        })
+      })
+    </script>
+  </section>
+  <section class="app">
+    <section class="header">
+      <div class="search">
+        <span class="iconify" data-icon="akar-icons:search"></span>
+        <input type="text" name="search" placeholder="What are you looking for">
+      </div>
+    </section>
+    <section class="main">
+      <%~ include('templates/components/partials/page-message/page-message.art') %>
+      <section class="page-admin">
+        <div class="meta">
+          <div class="breadcrumbs">
+            <div>
+              <% if ($data.meta.breadCrumbs) { %>
+              {{#each $data.meta.breadCrumbs crumb}}
+                {{#if crumb.url}}
+                  <a href="{{crumb.url}}">{{crumb.name}}</a>
+                {{else}}
+                  <span>{{crumb.name}}</span>
+                {{/if}}
+                {{#if $index < $data.meta.breadCrumbs.length - 1}}
+                  <span>/</span>
+                {{/if}}
+              {{/each}}
+              <% } else { %>
+              <a href="/admin">Admin</a>
+              <% } %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="title">
+              <h1>{{$data.meta.name}}</h1>
+            </div>
+            {{#if $data.meta.actions}}
+              <div class="actions">
+                {{#each $data.meta.actions action}}
+                  {{#if action.url}}
+                    {{#if action.method}}
+                      <form action="{{action.url}}" method="{{action.method}}">
+                        <button type="submit" class="btn {{action.class}}">{{action.name}}</button>
+                      </form>
+                    {{else}}
+                      <a href="{{action.url}}" class="btn {{action.class}}">{{action.name}}</a>
+                    {{/if}}
+                  {{else}}
+                    {{#if action.props}}
+                      <span {{#each action.props prop}} {{prop.prop}}="{{prop.value}}" {{/each}}
+                        class="{{action.classes}}">
+                        {{action.name}}
+                      </span>
+                    {{/if}}
+                  {{/if}}
+                {{/each}}
+              </div>
+            {{/if}}
+          </div>
+        </div>
+        <%~ include('templates/components/partials/modal-delete/modal-delete.art') %>
+        {{#block 'content'}}{{/block}}
+      </section>
+    </section>
+  </section>
+</body>
+
+</html>

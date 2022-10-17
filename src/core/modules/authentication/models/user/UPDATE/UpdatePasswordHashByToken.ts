@@ -1,4 +1,4 @@
-import { MongoHelper } from 'core/MongoHelper'
+import { MongoDriver } from 'core/database/Mongo/MongoDriver'
 
 /**
  * Update password hash for user given a token
@@ -8,7 +8,7 @@ import { MongoHelper } from 'core/MongoHelper'
  * @returns
  */
 export async function UpdatePasswordHashByToken (token: string, passwordHash: string): Promise<any> {
-  const mongo = MongoHelper.getDatabase()
+  const mongo = MongoDriver.getDatabase()
   const operationObject = await mongo.collection('users').updateOne({
     'resume_tokens.token': token
   }, {

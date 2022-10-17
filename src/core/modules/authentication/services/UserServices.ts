@@ -1,13 +1,14 @@
 import * as argon2 from 'argon2'
 import { logger } from 'core/utils/logger'
 import { InsertUser } from 'core/modules/authentication/models/user/INSERT/InserUser'
-import { Request } from 'express'
 import { InsertToken } from 'core/modules/authentication/models/user/INSERT/InsertToken'
 import { GetPasswordHash } from 'core/modules/authentication/models/user/GET/GetPasswordHash'
 import { GetUserIdByToken } from 'core/modules/authentication/models/user/GET/GetUserIdByToken'
 import { TokenServices } from 'core/modules/authentication/services/TokenServices'
 import { GetDoesUsernameExist } from '../models/user/GET/GetDoesUsernameExist'
 import striptags from 'striptags'
+import { FastifyRequest } from 'fastify'
+import { GetUsernameByToken } from '../models/user/GET/GetUsernameByToken'
 
 export class UserServices {
   private static instance: UserServices
@@ -38,11 +39,19 @@ export class UserServices {
    * @throws {Error} Password match error
    * @throws {Error} Auth token missing error
    */
-  public async register (req: Request): Promise<string> {
+  public async register (req: FastifyRequest<WildBody>): Promise<string> {
     const username = striptags(req.body.username ?? '')
     const password = striptags(req.body.password ?? '')
-    const passwordConf = striptags(req.body.passwordConf ?? '')
-    const email = striptags(req.body.email ?? '')
+    const passwordConf = striptags(req.body['password-confirm'] ?? '')
+    const authToken = striptags(req.body['auth-token'] ?? '')
+
+    if (authToken.length === 0) {
+      throw new Error('Auth token missing')
+    }
+
+    if (authToken !== process.env.REGISTER_AUTH_TOKEN) {
+      throw new Error('Invalid auth token')
+    }
 
     if (!this.USERNAME_REGEX.test(username)) {
       throw new Error('Username validation failed')
@@ -50,8 +59,6 @@ export class UserServices {
       throw new Error('Password failed validation. Is it too short?')
     } else if (password !== passwordConf) {
       throw new Error('Password mismatch')
-    } else if (email === '') {
-      throw new Error('Email validation failed or none supplied')
     }
 
     if (await GetDoesUsernameExist(username)) {
@@ -64,7 +71,7 @@ export class UserServices {
     const passwordHash = await argon2.hash(password)
 
     try {
-      await InsertUser(username, email, passwordHash, tokenHash, tokenExpires)
+      await InsertUser(username, passwordHash, tokenHash, tokenExpires)
       return token
     } catch (e: any) {
       logger.log('error', e.message)
@@ -83,7 +90,7 @@ export class UserServices {
    * @throws {Error} param error
    * @throws {Error} mongo insert / find error
    */
-  public async login (req: Request): Promise<string> {
+  public async login (req: FastifyRequest<WildBody>): Promise<string> {
     const authHeader = req.headers.authorization ?? ''
 
     if (authHeader.includes('Bearer')) {
@@ -198,5 +205,18 @@ export class UserServices {
    */
   public async hashPassword (password: string): Promise<string> {
     return await argon2.hash(password)
+  }
+
+  public async getUsernameByToken (token: string): Promise<string> {
+    const authToken = token
+
+    if (authToken === undefined) {
+      throw new Error('Auth token missing')
+    }
+
+    const tokenServices = TokenServices.getInstance()
+    const hashedToken = tokenServices.hashToken(authToken)
+
+    return await GetUsernameByToken(hashedToken)
   }
 }

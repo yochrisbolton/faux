@@ -1,6 +1,11 @@
 import nodemailer from 'nodemailer'
 
-export const sendMessage = async function (message: string, email: string, subject: string, from: string): Promise<void> {
+export const sendMessage = async function (args: {
+  from: string
+  to: string
+  subject: string
+  text: string
+}): Promise<void> {
   const host = process.env.SMTP_HOST ?? ''
   const port = Number(process.env.SMTP_PORT) ?? 0
   const user = process.env.SMTP_USER ?? ''
@@ -18,10 +23,10 @@ export const sendMessage = async function (message: string, email: string, subje
     })
 
     await transporter.sendMail({
-      from: from,
-      to: email,
-      subject: subject,
-      text: message
+      from: args.from,
+      to: args.to,
+      subject: args.subject,
+      text: args.text
     })
   } else {
     throw new Error('Missing mailer info')

@@ -1,0 +1,13 @@
+<div class="modal delete">
+  <div class="background"></div>
+  <div class="modal-delete body">
+    <div class="head">
+      <!-- close icon -->
+    </div>
+    <form method="post" onsubmit="window.faux.formTools.sendFormAjax(event, this)">
+      <h2>Delete <span class="type">Site</span></h2>
+      <p>Are you sure you want to delete this <span class="type">Site</span>? This action can't be undone.</p>
+      <button>Delete <span class="type">Site</span></button>
+    </form>
+  </div>
+</div>

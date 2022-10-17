@@ -1,0 +1,56 @@
+<% $data.meta = {
+  title: $data.siteInfo?.site_name,
+  description: $data.siteInfo?.site_meta_description,
+  url: 'https://' + $data.siteInfo?.site_domain,
+  moduleName: 'homepage'
+} %>
+<% extend('templates/components/layouts/promobar-nav-body-footer/promobar-nav-body-footer.art') %>
+
+{{#block 'content'}}
+  <section class="meta">
+    <h1>{{$data.siteInfo?.site_name}}</h1>
+    <p>{{$data.siteInfo?.site_meta_description}}</p>
+    <form method="POST" action="/search" class="search-container">
+      <div class="search">
+        <span class="iconify" data-icon="eva:search-outline"></span>
+        <input placeholder="Type to search articles" name="query"
+          value="<%= it?.originalQuery ? it?.originalQuery : '' %>">
+      </div>
+    </form>
+  </section>
+  <div class="row">
+    <div class="feed">
+      <section class="trending">
+        <% include ('templates/components/partials/article-list/template', {
+          title: 'Trending articles from across the site',
+          related: $data.relatedArticles
+        }) %>
+      </section>
+      <% include ('templates/components/partials/newsletter/template') %>
+      <section class="recent">
+        <% include ('templates/components/partials/article-list/template', {
+          title: 'Recently updated articles for you to check out',
+          related: $data.relatedArticles
+        }) %>
+      </section>
+      <section class="more">
+        <% include ('templates/components/partials/article-list/template', {
+          title: 'Looking for more?', 
+          related: $data.relatedArticles
+        }) %>
+      </section>
+      <section class="featured">
+        <% include ('templates/components/partials/article-list/template', {
+          title: 'Staff picks for you',
+          related: $data.relatedArticles
+        }) %>
+      </section>
+      <section class="feed">
+        <% include ('templates/components/partials/article-list/template', {
+          title: 'More we think you\'ll like',
+          related: $data.relatedArticles
+        }) %>
+      </section>
+    </div>
+  </div>
+{{/block}}

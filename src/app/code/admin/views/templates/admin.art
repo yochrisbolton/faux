@@ -1,0 +1,19 @@
+<% $data.meta = {
+  styleSheet: 'styles',
+  title: 'Admin Dashboard',
+  active: 'dashboard',
+  name: 'Dashboard',
+  breadCrumbs: [
+    {
+      name: 'Admin',
+      url: '/admin'
+    }
+  ]
+} %>
+<% extend('templates/pages/admin/layouts/sidebar-and-page/layout') %>
+
+{{#block 'content'}}
+  <div class="content">
+    Howdy
+  </div>
+{{/block}}

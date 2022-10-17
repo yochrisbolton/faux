@@ -1,0 +1,12 @@
+<form class="subscribe light" data-action="/subscribe" method="post"
+  onsubmit="window.faux.formTools.sendFormAjax(event, this)">
+  <div class="title">Want to be an expert?</div>
+  <div class="copy">Get the best of {{$data.siteInfo.site_name}} straight to your inbox.</div>
+  <div class="row">
+    <input type="text" placeholder="Your email" required>
+    <button type="submit">Get it</button>
+  </div>
+  <div class="disclaimer"> By signing up, you will receive emails about product updates, events and marketing and
+    you agree to our <a href="/terms-of-service" target="_blank">terms of
+      service</a> and <a href="/privacy-policy" target="_blank">privacy policy.</a></div>
+</form>

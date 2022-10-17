@@ -1,0 +1,178 @@
+<% $data.meta = {
+  styleSheet: 'styles',
+  title: $data.postInfo?.title ? `Edit Article: ${$data.postInfo.title}` : 'Add Article',
+  name: $data.postInfo?.title ? `Edit Article: ${$data.postInfo.title}` : 'New Article',
+  active: 'post-list',
+  breadCrumbs: [
+    {
+      name: 'Admin',
+    },
+    {
+      name: 'Articles',
+      url: '/admin/posts'
+    },
+    {
+      name: $data.postInfo?.title ? 'Edit Article' : 'New Article'
+    }
+  ]
+}
+
+if ($data.postInfo) {
+  $data.meta.actions = [
+    {
+      name: 'Delete Article',
+      props: [
+        { prop:'data-action', value: `/admin/posts/delete/${ $data.postInfo.human_id }` },
+        { prop:'data-modal-trigger', value: 'delete' },
+        { prop:'data-type', value: 'Article' }
+      ]
+    },
+    {
+      name: 'Save Changes',
+      classes: 'accent',
+      props: [
+        { prop:'data-submit-form' }
+      ]
+    }
+  ]
+} else {
+  $data.meta.actions = [
+    {
+      name: 'Save Article',
+      classes: 'accent',
+      props: [
+        { prop:'data-submit-form' }
+      ]
+    }
+  ]
+} %>
+}
+
+%>
+<% extend('templates/pages/admin/layouts/sidebar-and-page/layout') %>
+
+{{#block 'content'}}
+  <form class="content"
+    data-action="/admin/posts/{{$data.postInfo?.human_id ? 'update/' + $data.postInfo?.human_id : 'new'}}" method="post"
+    onsubmit="window.faux.formTools.sendFormAjax(event, this)">
+    <div class="main raw-form">
+      <div class="field">
+        <div class="title">Article Title <span class="required">required</span></div>
+        <div class="subtitle">The name that appears on the page</div>
+        <input type="text" name="title" placeholder="Article title" required value="{{$data.postInfo?.title ?? ''}}">
+      </div>
+      <div class="field">
+        <div class="title">Article Summary</div>
+        <div class="subtitle">Quick summary of the article (optional)</div>
+        <input type="text" name="summary" placeholder="Article summary" value="{{$data.postInfo?.summary ?? ''}}">
+      </div>
+      <div class="field">
+        <div class="title">Hero Image <span class="required">required</span></div>
+        <div class="subtitle">The image that displays below the title (optional)</div>
+        <input type="text" name="hero" placeholder="Image URL" required value="{{$data.postInfo?.hero ?? ''}}">
+      </div>
+      <div class="field">
+        <div class="title">Article Markdown</div>
+        <div class="subtitle">Paste in or write the markdown for the article</div>
+        <div class="md-editor"></div>
+      </div>
+    </div>
+    <div class="widgets">
+      <div class="widget">
+        <div class="title">Enabled</div>
+        <div class="subtitle">Disabled posts route to 'not found' page</div>
+        <select required autocomplete="off" name="enabled" value="{{$data.postInfo?.enabled ?? ''}}">
+          <option value="false" {{#if $data.postInfo?.enabled == false}}selected{{/if}}>Disabled</option>
+          <option value="true" {{#if $data.postInfo?.enabled == true}}selected{{/if}}>Enabled</option>
+        </select>
+      </div>
+      <div class="widget">
+        <div class="title">Show Hero Image</div>
+        <div class="subtitle">Disables hero image (still used as thumbnail)</div>
+        <select required autocomplete="off" name="show-hero" value="{{$data.postInfo?.show_hero ?? ''}}">
+          <option value="true" {{#if $data.postInfo?.show_hero == true}}selected{{/if}}>Yes</option>
+          <option value="false" {{#if $data.postInfo?.show_hero == false}}selected{{/if}}>No</option>
+        </select>
+      </div>
+      <div class="widget">
+        <div class="title">Topic Site <span class="required">required</span></div>
+        <div class="subtitle">What site this post is for</div>
+        <select required autocomplete="off" name="site" value="{{$data.postInfo?.site ?? ''}}">
+          <option selected disabled value="">Select Option</option>
+          {{#each $data.siteList site}}
+            <option value="{{site.human_id}}" {{#if site.human_id == $data.postInfo?.site}}selected{{/if}}>
+              {{site.site_name}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="widget">
+        <div class="title">Author</div>
+        <div class="subtitle">What author to associate with the post</div>
+        <select name="author" value="{{$data.postInfo?.author ?? ''}}">
+          <option selected value="auto">Automatic</option>
+          {{#each $data.authorList author}}
+            <option value="{{author.id}}" {{#if author.id == $data.postInfo?.author}}selected{{/if}}>
+              {{author.name}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+    <div class="hidden">
+      <textarea name="markdown"></textarea>
+    </div>
+  </form>
+  </div>
+
+  <script>
+    const plugins = [bytemdPluginGfm()]
+    const dataFromPost = `{{@ $data.postInfo?.markdown ?? ''}}`
+
+    const editor = new bytemd.Editor({
+      target: document.querySelector('.md-editor'),
+      props: {
+        value: '# heading\n\nparagraph\n\n> blockquote',
+        plugins,
+      },
+    })
+
+    if (dataFromPost !== '') {
+      editor.$set({ value: dataFromPost })
+    }
+
+    let value = ''
+
+    editor.$on('change', (e) => {
+      editor.$set({ value: e.detail.value })
+      document.querySelector('[name="markdown"]').value = e.detail.value
+    })
+
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchAuthorList()
+    })
+
+    function fetchAuthorList() {
+      document.querySelector('[name="site"]').addEventListener('change', async (e) => {
+        const site = e.target.value
+        const response = await (await window.fetch(`/admin/posts/get/site/authors/${site}`)).json()
+
+        document.querySelector('[name="author"]').textContent = ''
+
+        const autoOption = document.createElement('option')
+        autoOption.value = 'auto'
+        autoOption.innerText = 'Automatic'
+        document.querySelector('[name="author"]').appendChild(autoOption)
+
+        response.authorList.forEach(author => {
+          const option = document.createElement('option')
+          option.value = author.id
+          option.innerText = author.name
+          document.querySelector('[name="author"]').appendChild(option)
+        })
+      })
+    }
+
+    fetchAuthorList()
+  </script>
+{{/block}}

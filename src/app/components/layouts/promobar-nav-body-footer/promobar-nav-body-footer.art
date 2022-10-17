@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%~ include('templates/components/partials/head/head.art', it) %>
+  <title><%= $data.meta.title %></title>
+  <meta name="description" content="<%= $data.meta.description %>">
+  <meta property="og:description" content="<%= $data.meta.description %>">
+  <meta property="og:url" content="<%= $data.meta.url %>">
+  <meta property="og:title" content="<%= $data.meta.title %>">
+  <meta property="og:site_name" content="<%= $data.meta.title %>">
+  <meta name="twitter:description" content="<%= $data.meta.description %>">
+  <meta name="twitter:url" content="<%= $data.meta.url %>">
+  <meta name="twitter:title" content="<%= $data.meta.title %>">
+  <% if ($data.meta.image) { %>
+  <meta property="og:image" content="<%= $data.meta.image %>">
+  <meta name="twitter:image" content="<%= $data.meta.image %>">
+  <% } %>
+  <link rel="canonical" href="<%= $data.meta.url %>">
+  <% if(it?.meta?.jsonLd) { %>
+  <script type="application/ld+json">
+    <%~ JSON.stringify(it?.meta?.jsonLd) %> 
+  </script>
+  <% } %>
+  <script type="application/ld+json">
+    {
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "Godot Asset Library",
+    "url": "https://godotassetlibrary.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://godotassetlibrary.com/search/?q={search_term}",
+      "query-input": "required name=search_term"
+      }
+    }
+  </script>
+</head>
+
+
+<body>
+  <%~ include('templates/components/partials/nav/nav.art', it) %>
+
+  <% var pageCss = $imports.fetchCss($data.meta.moduleName) %>
+  {{#if pageCss}}
+    {{@pageCss}}
+  {{/if}}
+
+  <% var layoutJs = $imports.fetchJs('components/layouts/promobar-nav-body-footer', 'driver.js') %>
+  {{#if layoutJs}}
+    {{@layoutJs}}
+  {{/if}}
+
+  {{#if $data.siteInfo?.custom_css}}
+    {{@$data.siteInfo.custom_css}}
+  {{/if}}
+
+  <section class="main">
+    {{#block 'content'}}{{/block}}
+  </section>
+
+  <%~ include('templates/components/partials/footer/footer.art', it) %>
+  <script src="https://code.iconify.design/2/2.1.2/iconify.min.js" defer></script>
+</body>
+
+</html>

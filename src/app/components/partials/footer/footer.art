@@ -1,0 +1,44 @@
+<footer>
+  <div class="content">
+    <div class="row">
+      <div class="brand">
+        <a href="/" title="Go to homepage">
+          <div class="title">{{$data.siteInfo.site_name}}</div>
+        </a>
+        <div class="description">
+          {{$data.siteInfo.site_meta_description}}
+        </div>
+      </div>
+      <div class="inbox">
+        <div class="title">Right in your inbox</div>
+        <div class="description">Sign up for our newsletter to get the latest news and updates.</div>
+        <form class="row" data-action="/subscribe" method="post"
+          onsubmit="window.faux.formTools.sendFormAjax(event, this)">
+          <input type="email" placeholder="Your email address" autocomplete="off" name="email" required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="disclaimer">
+      <div class="description">
+        By signing up, you will receive emails about product updates, events and marketing and you agree to our <a
+          href="terms-of-service" target="_blank">terms of
+          service</a> and <a href="/ters/privacy-policy" target="_blank">privacy policy.</a>
+      </div>
+      {{#if $data.siteInfo.site_disclaimer}}
+        <div class="description">{{$data.siteInfo.site_disclaimer}}</div>
+      {{/if}}
+      <div class="description">This site is not affiliated with any third party. All trademarks are the property of
+        their respective owners.</div>
+    </div>
+    <div class="row border-top">
+      <div class="copyright">© 2022 {{$data.siteInfo.site_name}}. All Rights Reserved.</div>
+      <div class="links">
+        <a href="/home" title="Homepage">Home</a>
+        <a href="/terms-of-service" title="Terms of Service">Terms of Service</a>
+        <a href="/privacy-policy" title="Privacy Policy">Privacy Policy</a>
+        <a href="/contact" title="Contact Us">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>

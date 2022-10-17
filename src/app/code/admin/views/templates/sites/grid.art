@@ -1,0 +1,74 @@
+<% $data.meta = {
+  styleSheet: 'styles',
+  title: 'View Sites',
+  active: 'site-list',
+  name: 'Topic Sites',
+  breadCrumbs: [
+    {
+      name: 'Admin',
+    },
+    {
+      name: 'Sites',
+      url: '/admin/sites'
+    }
+  ],
+  actions: [
+    {
+      name: 'Add New Site',
+      url: '/admin/sites/new',
+      classes: 'accent'
+    }
+  ]
+} %>
+<% extend('templates/pages/admin/layouts/sidebar-and-page/layout') %>
+
+{{#block 'content'}}
+  <%~ include('templates/components/partials/modal-delete/modal-delete.art') %>
+
+  <form class="content" data-action="/admin/sites" method="post"
+    onsubmit="window.faux.formTools.sendFormAjax(event, this)">
+    <div class="main">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th class="min">Domain</th>
+            <th class="min">Enabled</th>
+            <th class="fixed">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each $data.siteList site}}
+            <tr>
+              <td><a class="inherit" href="/admin/sites/{{site.site_name}}">{{site.site_name}}</a></td>
+              <td>{{site.domain_name}}</td>
+              <td class="min">{{site.site_enabled}}</td>
+              <td class="fixed">
+                <a href="/admin/sites/{{site.site_name}}">Edit</a>
+                <a href="">Visit</a>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      {{#if $data.siteList.length === 0}}
+        <div class="none">Unable to find sites</div>
+      {{/if}}
+    </div>
+    <div class="widgets">
+      <div class="widget">
+        <div class="title">Name Filter</div>
+        <div class="subtitle">Filter by name</div>
+        <input type="text" placeholder="Name" autocomplete="off" name="name-filter">
+      </div>
+      <div class="widget">
+        <div class="title">Category Filter</div>
+        <div class="subtitle">Filter by name</div>
+        <select required autocomplete="off" name="category">
+          <option>Example Category</option>
+          <option>Another Example</option>
+        </select>
+      </div>
+    </div>
+  </form>
+{{/block}}

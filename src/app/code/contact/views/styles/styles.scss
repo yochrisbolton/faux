@@ -1,0 +1,86 @@
+@import "components/layouts/promobar-nav-body-footer/styles";
+@import "components/utils/forms";
+@import "components/utils/mixins";
+@import "components/partials/article-list/styles";
+
+.page-contact {
+  margin-top: 30px;
+
+  input {
+    @include form-input;
+    width: 100%;
+    margin-top: 5px;
+    border-radius: 6px;
+  }
+
+  textarea {
+    @include form-input;
+    width: 100%;
+    margin-top: 5px;
+    border-radius: 6px;
+    height: 150px;
+    resize: vertical;
+  }
+
+  button {
+    @include form-button;
+    border-radius: 6px;
+    margin-left: auto;
+  }
+
+  h1 {
+    font-size: 47px;
+  }
+
+  .disclaimer {
+    font-size: 14px;
+    color: #6a6a6a;
+  }
+
+  .form-group {
+    margin-top: 15px;
+  }
+
+  .actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .message {
+    margin-top: 20px;
+    position: sticky;
+    top: 20px;
+    z-index: 5;
+
+    &.error {
+      .content {
+        background: #fb6d05;
+      }
+    }
+
+    .content {
+      font-size: 14px;
+      padding: 10px 15px;
+      border-radius: 3px;
+      background-color: white;
+      font-family: "Inter";
+      color: white;
+      background: #055efb;
+      margin-bottom: 20px;
+    }
+  }
+
+  a {
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

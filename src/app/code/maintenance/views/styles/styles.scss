@@ -1,0 +1,34 @@
+@import "components/layouts/promobar-nav-body-footer/styles";
+@import "components/partials/article-list/styles";
+
+body {
+  display: flex;
+}
+
+.main {
+  margin: auto;
+}
+
+.page-maintenance {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  text-align: center;
+
+  .article-list {
+    margin-top: 80px;
+  }
+
+  h2 {
+    font-size: 47px;
+    font-weight: 700;
+    margin-bottom: 0px;
+  }
+
+  p {
+    margin-top: 25px;
+    font-size: 23px;
+    font-weight: 500;
+    margin-top: 15px;
+  }
+}

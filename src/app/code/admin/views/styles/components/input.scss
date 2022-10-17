@@ -1,0 +1,17 @@
+@mixin admin-input {
+  @include inter-like-font;
+  background: #232424;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  color: white;
+  border: 1px solid #2d2f31;
+  outline: none;
+  transition: 0.05s;
+
+  &:hover,
+  &:active,
+  &:focus {
+    border-color: #535455;
+  }
+}

@@ -1,0 +1,182 @@
+<% $data.meta = {
+  styleSheet: 'styles',
+  title: 'View Articles',
+  active: 'post-list',
+  name: 'All Articles',
+  breadCrumbs: [
+    {
+      name: 'Admin',
+    },
+    {
+      name: 'Articles',
+      url: '/admin/posts'
+    }
+  ],
+  actions: [
+    {
+      name: 'Flush Cache',
+      url: '/admin/cache/flush/posts/posts',
+      method: 'post'
+    },
+    {
+      name: 'Add New Article',
+      url: '/admin/posts/new',
+      class: 'accent'
+    }
+  ]
+}
+
+var siteMap = {}
+$data.siteList.forEach(site => {
+  siteMap[site.human_id] = site.site_name
+})
+%>
+<% extend('templates/pages/admin/layouts/sidebar-and-page/layout') %>
+
+{{#block 'content'}}
+  <form class="content" data-action="/admin/sites" method="post"
+    onsubmit="window.faux.formTools.sendFormAjax(event, this)">
+    <div class="main">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th class="min">Site</th>
+            <th class="min">Views</th>
+            <th class="min">Enabled</th>
+            <th class="fixed">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each $data.postList post}}
+            <tr>
+              <td><a class="inherit" href="/admin/posts/{{post.human_id}}" title="{{post.title}}">{{post.title}}</a>
+              </td>
+              <td>{{siteMap[post.site]}}</td>
+              <td class="min">{{post.impressions}}</td>
+              <td class="min">{{post.enabled}}</td>
+              <td class="fixed">
+                <a href="/admin/posts/{{post.human_id}}">Edit</a>
+                <a href="/article/{{post.human_id}}/{{post.slug}}" target="_blank" rel="noreferrer noopener">Visit</a>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      {{#if $data.postList.length === 0}}
+        <div class="none">Unable to find posts</div>
+      {{/if}}
+
+      <div class="actions">
+        <!-- 
+          // TODO: Have this go through our other filter work - update or delete param vs resetting URL params on navigation
+          // Reference the code below for how to do this
+        -->
+        showing {{($data.pagination.start) + 1}}-{{$data.pagination.end}} posts of {{$data.pagination.total}} total
+        {{#if (($data.pagination.page) - 1) >= 0}}
+          <button type="button" class="prev" data-page="{{(($data.pagination.page) - 1)}}">Previous</button>
+        {{/if}}
+        {{#if $data.pagination.total > $data.pagination.end}}
+          <button type="button" class="next" data-page="{{(($data.pagination.page) + 1)}}">Next</button>
+        {{/if}}
+      </div>
+    </div>
+    <div class="widgets">
+      <div class="widget">
+        <div class="title">Sort By</div>
+        <div class="subtitle">How to sort the grid</div>
+        <select required autocomplete="off" name="sort-by">
+          <option value="default" {{if $data.filters.sort == 'default'}} selected {{/if}}>Default</option>
+          <option value="impressions" {{if $data.filters.sort == 'impressions'}} selected {{/if}}>Impressions</option>
+          <option value="site" {{if $data.filters.sort == 'site'}} selected {{/if}}>Site</option>
+          <option value="title" {{if $data.filters.sort == 'title'}} selected {{/if}}>Title</option>
+          <option value="enabled" {{if $data.filters.sort == 'enabled'}} selected {{/if}}>Enabled</option>
+        </select>
+      </div>
+      <div class="widget">
+        <div class="title">Title Filter</div>
+        <div class="subtitle">Filter by title</div>
+        <input type="text" placeholder="Title" autocomplete="off" name="title-filter" value="{{$data.filters.title}}">
+      </div>
+      <div class="widget">
+        <div class="title">Site Filter</div>
+        <div class="subtitle">Filter by Site</div>
+        <select required autocomplete="off" name="site">
+          <option selected value="">All</option>
+          {{#each $data.siteList site}}
+            <option value="{{site.human_id}}" {{if $data.filters.site == site.human_id}} selected {{/if}}>
+              {{site.site_name}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+  </form>
+  <script>
+    const titleFilter = document.querySelector('input[name="title-filter"]')
+    const siteFilter = document.querySelector('select[name="site"]')
+    const sortBy = document.querySelector('select[name="sort-by"]')
+    const form = document.querySelector('form')
+    const nextButton = document.querySelector('.actions .next')
+    const previousButton = document.querySelector('.actions .prev')
+
+    // Originally inspired by  David Walsh (https://davidwalsh.name/javascript-debounce-function)
+
+    // Returns a function, that, as long as it continues to be invoked, will not
+    // be triggered. The function will be called after it stops being called for
+    // `wait` milliseconds.
+    const debounce = (func, wait) => {
+      let timeout;
+
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    };
+
+    const returnFunction = debounce(() => {
+      UpdateUrlParam('title', titleFilter.value)
+    }, 500)
+
+    titleFilter.addEventListener('input', returnFunction)
+
+    if (nextButton) {
+      nextButton.addEventListener('click', () => {
+        UpdateUrlParam('page', nextButton.dataset.page)
+      })
+    }
+
+    if (previousButton) {
+      previousButton.addEventListener('click', () => {
+        UpdateUrlParam('page', previousButton.dataset.page)
+      })
+    }
+
+    siteFilter.addEventListener('change', () => {
+      UpdateUrlParam('site', siteFilter.value)
+    })
+
+    sortBy.addEventListener('change', () => {
+      UpdateUrlParam('sort', sortBy.value)
+    })
+
+    function UpdateUrlParam(name, value) {
+      if ('URLSearchParams' in window) {
+        var searchParams = new URLSearchParams(window.location.search)
+        if (value === '') {
+          searchParams.delete(name)
+        } else {
+          searchParams.set(name, value)
+        }
+        var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString()
+        history.pushState(null, '', newRelativePathQuery)
+        window.tooling.fetchAndReplace(window.location, true)
+      }
+    }
+  </script>
+{{/block}}

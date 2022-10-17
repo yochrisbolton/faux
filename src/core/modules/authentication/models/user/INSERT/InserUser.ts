@@ -1,4 +1,4 @@
-import { MongoHelper } from 'core/MongoHelper'
+import { MongoDriver } from 'core/database/Mongo/MongoDriver'
 import { customAlphabet } from 'nanoid/non-secure'
 
 /**
@@ -8,19 +8,17 @@ import { customAlphabet } from 'nanoid/non-secure'
  * into our database
  *
  * @param {string} username
- * @param {string} email
  * @param {string} passwordHash
  * @param {string} token
  * @param {string} tokenExpires
  * @returns
  */
-export async function InsertUser (username: string, email: string, passwordHash: string, token: string, tokenExpires: Date): Promise<any> {
+export async function InsertUser (username: string, passwordHash: string, token: string, tokenExpires: Date): Promise<any> {
   const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 36)
-  const mongo = MongoHelper.getDatabase()
+  const mongo = MongoDriver.getDatabase()
   const userObj = await mongo.collection('users').insertOne({
     human_id: nanoid(),
     username: username,
-    email: email,
     password_hash: passwordHash,
     username_lowercase: username.toLocaleLowerCase(),
     role: 'user',

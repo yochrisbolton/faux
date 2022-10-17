@@ -1,0 +1,34 @@
+@import "components/utils/body";
+@import "components/partials/nav/styles";
+@import "components/partials/footer/styles";
+$contained-width: 850px;
+
+.main {
+  width: 100%;
+  margin: 20px auto 0;
+  flex-grow: 1;
+  display: flex;
+  padding: 0 15px;
+  flex-direction: column;
+  max-width: $contained-width;
+}
+
+nav {
+  .contents {
+    max-width: calc($contained-width + 150px);
+    margin-left: -75px;
+    margin: auto;
+  }
+}
+
+footer {
+  .content {
+    max-width: calc($contained-width + 150px);
+    margin-left: -75px;
+    margin: auto;
+  }
+}
+
+p {
+  line-height: 24px;
+}

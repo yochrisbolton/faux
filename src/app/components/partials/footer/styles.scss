@@ -1,0 +1,146 @@
+@import "components/utils/variables";
+@import "components/utils/mixins";
+
+footer {
+  @include reset-ul;
+  @include brand-styles($title-color: $text-light-white, $subtitle-color: $text-light-lighter);
+
+  background: $color-brand-black;
+  width: 100%;
+  color: white;
+  margin-top: 110px;
+
+  a {
+    transition: 0.04s;
+    &:hover {
+      color: $text-light-white;
+    }
+  }
+
+  .content {
+    padding: 45px 15px 45px 15px;
+    margin: auto;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (max-width: 880px) {
+      flex-direction: column;
+
+      > * {
+        &:not(:first-child) {
+          margin-top: 30px;
+        }
+      }
+
+      .links {
+        margin-top: 15px;
+      }
+    }
+  }
+
+  .brand {
+    width: 350px;
+
+    @media screen and (max-width: 880px) {
+      width: 100%;
+    }
+
+    .title {
+      font-weight: 700;
+      font-size: 26px;
+    }
+
+    .description {
+      font-size: 16px;
+      margin-top: 5px;
+      color: #bebebe;
+      margin-top: 15px;
+    }
+  }
+
+  .disclaimer {
+    color: $text-light-darker;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #6b6b6b;
+    margin-top: 30px;
+    font-weight: 500;
+
+    .description {
+      margin-top: 10px;
+
+      @media screen and (max-width: 880px) {
+        margin-top: 20px;
+      }
+    }
+  }
+
+  .inbox {
+    width: 500px;
+
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .description {
+      font-size: 16px;
+      color: #bebebe;
+      margin-top: 10px;
+    }
+
+    button {
+      background: #055efb;
+      border-radius: 3px;
+      border: none;
+      color: white;
+      font-weight: 500;
+      padding: 0px 15px;
+      cursor: pointer;
+      min-height: 40px;
+
+      @media screen and (max-width: 880px) {
+        margin-top: 15px !important;
+      }
+    }
+
+    input {
+      border: 1px solid #323232;
+      border-radius: 3px;
+      padding: 10px 15px;
+      color: white;
+      margin-right: 15px;
+    }
+
+    form {
+      margin-top: 15px;
+    }
+  }
+
+  .border-top {
+    border-top: 1px solid #1e1e1e;
+    display: flex;
+    margin-top: 30px;
+    padding-top: 20px;
+
+    .copyright {
+      font-weight: 500;
+      font-size: 14px;
+      color: #939393;
+    }
+
+    .links {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 17px;
+      color: #757575;
+
+      a {
+        margin-right: 20px;
+      }
+    }
+  }
+}

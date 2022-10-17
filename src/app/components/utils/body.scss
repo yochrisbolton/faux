@@ -1,0 +1,43 @@
+@import "components/utils/variables";
+@import "components/utils/mixins";
+@include reset-header-spacing;
+
+html {
+  height: 100%;
+}
+
+* {
+  @include inter-like-font;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+}
+
+.no-text-select {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

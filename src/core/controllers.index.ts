@@ -4,6 +4,6 @@
 export * from './modules/authentication/controllers/index'
 
 /**
- * Pages exports
+ * App exports
  **/
-export * from '../pages/controllers.index'
+export * from '../app/controllers.index'

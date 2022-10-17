@@ -1,0 +1,222 @@
+<% $data.meta = {
+  styleSheet: 'styles',
+  title: $data.siteInfo?.site_name ? `Edit site: ${$data.siteInfo.site_name}` : 'Add new Site',
+  name: $data.siteInfo?.site_name ? `Edit Topic Site: ${$data.siteInfo.site_name}` : 'New Topic Site',
+  active: 'site-list',
+  breadCrumbs: [
+    {
+      name: 'Admin',
+    },
+    {
+      name: 'Sites',
+      url: '/admin/sites'
+    },
+    {
+      name: $data.siteInfo?.site_name ? 'Edit Site' : 'New Site'
+    }
+  ]
+} 
+
+if ($data.siteInfo?.site_name) {
+  $data.meta.actions = [
+    {
+      name: 'Delete Site',
+      props: [
+        { prop:'data-action', value: `/admin/sites/${$data.siteInfo.site_name}/delete` },
+        { prop:'data-modal-trigger', value: 'delete' },
+        { prop:'data-type', value: 'Site' }
+      ]
+    },
+    {
+      name: 'Save Changes',
+      classes: 'accent',
+      props: [
+        { prop:'data-submit-form' }
+      ]
+    }
+  ]
+} else {
+  $data.meta.actions = [
+    {
+      name: 'Save Site',
+      classes: 'accent',
+      props: [
+        { prop:'data-submit-form' }
+      ]
+    }
+  ]
+}
+
+%>
+<% extend('templates/pages/admin/layouts/sidebar-and-page/layout') %>
+
+{{#block 'content'}}
+  <form class="content"
+    data-action="/admin/sites/{{$data.siteInfo?.site_name ? 'update/' + $data.siteInfo?.site_name : 'new'}}"
+    method="post" onsubmit="window.faux.formTools.sendFormAjax(event, this)">
+    <div class="main raw-form">
+      <div class="field">
+        <div class="title">Site Name <span class="required">required</span></div>
+        <div class="subtitle">What to name the site, used on pages</div>
+        <input type="text" name="site-name" placeholder="Ex, Dynknow" required autocomplete="off"
+          value="{{$data.siteInfo?.site_name ?? ''}}">
+      </div>
+      <div class="field">
+        <div class="title">Disclaimer <span class="required">required</span></div>
+        <div class="subtitle">Disclaimer that goes in the footer</div>
+        <input type="text" name="site-disclaimer" placeholder="Ex, This site does not provide financial advice" required
+          autocomplete="off" value="{{$data.siteInfo?.site_disclaimer ?? ''}}">
+      </div>
+      <div class="field">
+        <div class="title">Authors <span class="required">required</span></div>
+        <div class="subtitle">The Authors to use on the site, minumum 1
+        </div>
+        <div class="list">
+          {{#each $data.siteInfo?.author_list author index}}
+            <div class="author tripple">
+              <input type="hidden" name="author-id-{{author.id}}" autocomplete="off" value="{{author.id}}">
+              <input type="text" name="author-image-{{author.id}}" placeholder="Image URL" autocomplete="off"
+                value="{{author.image}}">
+              <input type="text" name="author-name-{{author.id}}" placeholder="Name" autocomplete="off"
+                value="{{author.name}}">
+              <button type="button" {{index === 0 ? 'class="first"' : '' }}>Remove</button>
+            </div>
+          {{/each}}
+        </div>
+        <button type="button" class="add-author">Add author</button>
+      </div>
+      <div class="field">
+        <div class="title">Site Description <span class="required">required</span></div>
+        <div class="subtitle">What shows up in google and when shared to facebook by default</div>
+        <input type="text" name="site-meta-description" placeholder="Ex, Find all the best information for ... here"
+          autocomplete="off" value="{{$data.siteInfo?.site_meta_description ?? ''}}" required>
+      </div>
+      <div class="field">
+        <div class="title">Site Image</div>
+        <div class="subtitle">The image that appears when share on facebook by default</div>
+        <input type="text" name="site-meta-image" placeholder="somewebsite.com/myimage" autocomplete="off"
+          value="{{$data.siteInfo?.site_meta_image ?? ''}}">
+      </div>
+      <div class="field">
+        <div class="title">SEO Optimized Title</div>
+        <div class="subtitle">The title appears in google and facebook by default</div>
+        <input type="text" name="site-meta-title" placeholder="Ex, 'Website Name | Find The Best Info'"
+          autocomplete="off" value="{{$data.siteInfo?.site_meta_title ?? ''}}">
+      </div>
+      <div class="field">
+        <div class="title">CSS Editor</div>
+        <div class="subtitle">Optional custom CSS rules</div>
+        <textarea class="editor" autocomplete="off"></textarea>
+      </div>
+    </div>
+    <div class="widgets">
+      <div class="widget">
+        <div class="title">Enabled</div>
+        <div class="subtitle">Disabled sites don't allow routing</div>
+        <select required autocomplete="off" name="enabled">
+          <option value="false" {{#if $data.siteInfo?.site_enabled == false}}selected{{/if}}>Disabled</option>
+          <option value="true" {{#if $data.siteInfo?.site_enabled == true}}selected{{/if}}>Enabled</option>
+        </select>
+      </div>
+      <div class="widget">
+        <div class="title">Domain <span class="required">required</span></div>
+        <div class="subtitle">Sites domain name</div>
+        <input type="text" name="domain-name" placeholder="Ex, dynknow.group" required autocomplete="off"
+          value="{{$data.siteInfo?.domain_name ?? ''}}">
+      </div>
+      <div class="widget">
+        <div class="title">Main Color</div>
+        <div class="subtitle">Change the sites main color</div>
+        <input type="text" name="main-color" placeholder="#hex code; leave blank for default" autocomplete="off"
+          value="{{$data.siteInfo?.main_color ?? ''}}">
+      </div>
+      <div class="widget">
+        <div class="title">Secondary Color</div>
+        <div class="subtitle">Change the sites secondary color</div>
+        <input type="text" name="secondary-color" placeholder="#hex code; leave blank for default" autocomplete="off"
+          value="{{$data.siteInfo?.secondary_color ?? ''}}">
+      </div>
+      <div class="widget">
+        <div class="title">Accent Color</div>
+        <div class="subtitle">Change the sites accent color</div>
+        <input type="text" name="accent-color" placeholder="#hex code; leave blank for default" autocomplete="off"
+          value="{{$data.siteInfo?.accent_color ?? ''}}">
+      </div>
+      <div class="widget">
+        <div class="title">Newsletter Subscribe hook</div>
+        <div class="subtitle">Change the hook that appears in the newsletter CTA box</div>
+        <input type="text" name="newsletter-hook" placeholder="Want to learn more?" autocomplete="off"
+          value="{{$data.siteInfo?.newsletter_hook ?? ''}}">
+      </div>
+    </div>
+    <div class="hidden">
+      <input type="text" name="site-id" value="{{@$data.siteInfo?.human_id ?? ''}}">
+      <textarea name="custom-css">{{@$data.siteInfo?.custom_css ?? ''}}</textarea>
+    </div>
+  </form>
+  <script>
+    function initCodeMirror() {
+      const editor = CodeMirror.fromTextArea(document.querySelector('.editor'), {
+        mode: 'css',
+        lineNumbers: true,
+        theme: 'ayu-mirage',
+        indentWithTabs: true,
+        tabSize: 2,
+      })
+
+      editor.setValue(document.querySelector('[name="custom-css"]').value)
+
+      editor.on('change', function () {
+        editor.save()
+        document.querySelector('[name="custom-css"]').value = editor.getValue()
+      })
+    }
+
+    function addAuthorToForm() {
+      const addAuthor = document.querySelector('.add-author')
+      const authorList = document.querySelector('.list')
+
+      if (!authorList.hasChildNodes()) {
+        addAuthorToDom(true)
+      }
+
+      addAuthor.addEventListener('click', function () {
+        addAuthorToDom()
+      })
+
+      authorList.addEventListener('click', function (e) {
+        if (e.target.tagName === 'BUTTON' && !e.target.classList.contains('first')) {
+          e.target.parentElement.remove()
+        }
+      })
+    }
+
+    function addAuthorToDom(first) {
+      const authorList = document.querySelector('.list')
+      const id = generateRandomId(10)
+      const author = document.createElement('div')
+      author.classList.add('author')
+      author.classList.add('tripple')
+      author.innerHTML = `
+        <input type="hidden" name="author-id-${id}" autocomplete="off" value="${id}">
+        <input type="text" name="author-image-${id}" placeholder="Image URL" autocomplete="off">
+        <input type="text" name="author-name-${id}" placeholder="Name" autocomplete="off">
+        <button type="button" ${first ? 'class="first"' : ''}>Remove</button>
+      `
+      authorList.appendChild(author)
+    }
+
+    function generateRandomId(length) {
+      let result = ''
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      const charactersLength = characters.length
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength))
+      }
+      return result
+    }
+
+    initCodeMirror()
+    addAuthorToForm()
+  </script>
+{{/block}}

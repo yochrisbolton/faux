@@ -4,6 +4,5 @@
 export * from './modules/authentication/jobs/index'
 
 /**
- * Page exports
+ * App exports
  */
-export * from 'pages/jobs.index'

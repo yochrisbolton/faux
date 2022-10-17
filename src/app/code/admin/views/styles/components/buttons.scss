@@ -1,0 +1,21 @@
+@mixin admin-button($background: #323337, $full: false) {
+  @if $full == true {
+    button {
+      @include raw-styes($background);
+    }
+  }
+
+  @if $full == false {
+    @include raw-styes($background);
+  }
+}
+
+@mixin raw-styes($background) {
+  padding: 10px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 500;
+  background: $background;
+  border: none;
+  color: white;
+}

@@ -1,11 +1,11 @@
-import { MongoHelper } from 'core/MongoHelper'
+import { MongoDriver } from 'core/database/Mongo/MongoDriver'
 import { logger } from 'core/utils/logger'
 
 /**
  * Deletes resume tokens that are expired
  */
 export async function DeleteExpiredResumeTokens (): Promise<any> {
-  const mongo = MongoHelper.getDatabase()
+  const mongo = MongoDriver.getDatabase()
 
   mongo.collection('users').updateMany({
     'resume_tokens.expires': {
@@ -20,6 +20,6 @@ export async function DeleteExpiredResumeTokens (): Promise<any> {
       }
     }
   }).catch(e => {
-    logger.log('error', 'Error pulling resume token', [...e])
+    logger.log('error', 'Error pulling resume token', [e])
   })
 }

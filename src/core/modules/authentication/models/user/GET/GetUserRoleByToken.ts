@@ -1,4 +1,4 @@
-import { MongoHelper } from 'core/MongoHelper'
+import { MongoDriver } from 'core/database/Mongo/MongoDriver'
 
 /**
  * Get user human_id given hashed token
@@ -8,7 +8,7 @@ import { MongoHelper } from 'core/MongoHelper'
  * @throws {error} if user not found
  */
 export async function GetUserRoleByToken (token: string): Promise<string> {
-  const mongo = MongoHelper.getDatabase()
+  const mongo = MongoDriver.getDatabase()
   const operationObject = await mongo.collection('users').findOne({
     'resume_tokens.token': token
   }, {

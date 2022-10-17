@@ -1,0 +1,32 @@
+@import "components/utils/body";
+@import "components/partials/page-message/styles";
+@import "code/admin/views/styles/components/buttons";
+@import "code/admin/views/styles/components/input";
+
+body {
+  display: flex;
+  flex-direction: row;
+  background: #111315;
+  color: white;
+}
+
+.app {
+  width: 100%;
+}
+
+.login {
+  width: 500px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  flex-direction: column;
+}
+
+.required {
+  color: #fb0528;
+  font-size: 13px;
+  margin-left: 3px;
+}
+
+.hidden {
+  display: none;
+}

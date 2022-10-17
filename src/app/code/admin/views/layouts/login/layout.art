@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title><%= $data.meta.title %></title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap"
+    media="print" onload="this.media='all'">
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Inter:wght@500;600;700&family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet">
+  </noscript>
+</head>
+
+<body>
+  <% var pageCss = $imports.fetchCss($data.meta.moduleName) %>
+  {{#if pageCss}}
+    {{@pageCss}}
+  {{/if}}
+
+  <% var layoutJs = $imports.fetchJs('pages/admin/layouts/login') %>
+  {{#if layoutJs}}
+    {{@layoutJs}}
+  {{/if}}
+
+  <section class="main">
+    <section class="login">
+      <%~ include('templates/components/partials/page-message/page-message.art') %>
+
+      {{#block 'content'}}{{/block}}
+    </section>
+  </section>
+  <script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
+</body>
+
+</html>

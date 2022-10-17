@@ -8,6 +8,20 @@ const argv = require('minimist')(process.argv.slice(2))
 let appRunning = false
 
 /**
+ * Add folders to watch for changes in
+ *
+ * Usecases:
+ * - If we're in dev mode, we want to watch for any new files
+ *   that are added to the project and move them over to the dist
+ *   folder
+ */
+const foldersToWatch = [
+  { path: 'templates', type: 'template', moveFunction: moveTemplatesAndJavascript },
+  { path: 'javascript', type: 'javascript', moveFunction: moveTemplatesAndJavascript },
+  { path: 'styles', type: 'scss', moveFunction: compileAndMoveScss }
+]
+
+/**
  * Goals:
  * - glob find SCSS, JS, TS, templates and static content
  * - watch for changes
@@ -21,41 +35,46 @@ let appRunning = false
  */
 function makeDistFolder () {
   fs.mkdirSync(path.join(__dirname, '../dist/templates'), { recursive: true })
-  fs.mkdirSync(path.join(__dirname, '../dist/public/javascript'), { recursive: true })
   fs.mkdirSync(path.join(__dirname, '../dist/public/styles'), { recursive: true })
+}
+
+function findAndWatch (fileGlob, type, moveFunction, passAlongFiles = false) {
+  glob(path.join(__dirname, fileGlob), {}, (_err, files) => {
+    files.forEach(file => {
+      // in case there is a path prefixed, lets lob it off
+      file = file.split('src/')[1]
+
+      if (passAlongFiles) {
+        watchFileOrFolder(file, type, moveFunction, files)
+      } else {
+        watchFileOrFolder(file, type, moveFunction)
+      }
+
+      /** on first start */
+      moveFunction(file)
+    })
+  })
 }
 
 /**
  * Find our SCSS in the project
  */
 function findScss () {
-  glob(path.join(__dirname, '/**/*.scss'), {}, (_err, files) => {
-    files.forEach(file => {
-      compileAndMoveScss(file)
-
-      // in case there is a path prefixed, lets lob it off
-      file = file.split('src/')[1]
-
-      watchFileOrFolder(file, 'scss', compileAndMoveScss, files)
-    })
-  })
+  findAndWatch('/**/*.scss', 'scss', compileAndMoveScss, true)
 }
 
 /**
- * Find all ETA templates in projects
+ * Find all ART templates in projects
  */
 function findTemplates () {
-  glob(path.join(__dirname, '/**/*.eta'), {}, (_err, files) => {
-    files.forEach(file => {
-      // in case there is a path prefixed, lets lob it off
-      file = file.split('src/')[1]
+  findAndWatch('/**/*.art', 'template', moveTemplatesAndJavascript)
+}
 
-      watchFileOrFolder(file, 'template', moveTemplates)
-
-      /** on first start */
-      moveTemplates(file)
-    })
-  })
+/**
+ * Find all JS in project
+ */
+function findJavaScript () {
+  findAndWatch('/**/*.js', 'javascript', moveTemplatesAndJavascript)
 }
 
 /**
@@ -67,8 +86,6 @@ function watchPublicFolders () {
   /** on first load */
   movePublicFolderFile('static')
 
-  watchFileOrFolder('static/images', 'static image', movePublicFolderFile, 'image')
-  watchFileOrFolder('static/javascript', 'static javascript', movePublicFolderFile, 'javascript')
   watchFileOrFolder('static', 'static general', movePublicFolderFile)
 }
 
@@ -101,7 +118,8 @@ function watchFileOrFolder (name, type, moveFunction, passAlongObject = {}) {
 }
 
 function compileAndMoveScss (file, allScssFiles = []) {
-  if (file.includes('pages/_components') && allScssFiles.length > 0) {
+  console.log(`Compiling SCSS file: ${file}`)
+  if ((file.includes('components/') || file.includes('layouts/')) && allScssFiles.length > 0) {
     /**
      * If we're not a page we'll assume that we're instead a partial
      * or something, and since we don't really know what files are
@@ -111,10 +129,10 @@ function compileAndMoveScss (file, allScssFiles = []) {
     allScssFiles.forEach(file => {
       compileAndMoveScss(file)
     })
-  } else if (file.includes('pages') && !file.includes('_components')) { // if were a page type, just compile that file alone
+  } else if (file.includes('code/')) { // if were a page type, just compile that file alone
     /**
      * We want to change from:
-     * - src/core/modules/pages/{module}/views/styles/{}.scss
+     * - src/core/code/{module}/views/styles/{}.scss
      * To:
      * - (in dist/public) `styles/{page}/*.css
      * Because:
@@ -131,11 +149,11 @@ function compileAndMoveScss (file, allScssFiles = []) {
       .replace('core/', '')
       .replace('views/', '')
       .replace('styles/', '')
-      .replace('pages/', 'styles/pages/')
+      .replace('app/code/', 'styles/')
       .replace('.scss', '.css')
 
     const exportPath = path.join(path.join(__dirname, '../dist/public/'), updatedFileName)
-    const compiledCSS = sass.compile(path.join(file), { loadPaths: [path.join(__dirname, 'pages')] })
+    const compiledCSS = sass.compile(path.join(file), { loadPaths: [path.join(__dirname, 'app')] })
 
     fs.mkdirSync(path.dirname(exportPath), { recursive: true })
     fs.writeFile(`${exportPath}`, minify.minify(compiledCSS.css).css)
@@ -143,7 +161,7 @@ function compileAndMoveScss (file, allScssFiles = []) {
 }
 
 /**
- * Move pages and component to better namespace in dist/
+ * Move pages, components and JS to better namespace in dist/
  *
  * If we were to use raw file path for namespace, it'd
  * start to feel a little repetitive. So instead when
@@ -151,21 +169,21 @@ function compileAndMoveScss (file, allScssFiles = []) {
  * predictable and only includes the most relevant information
  *
  * Ex, from:
- * - core/modules/pages/{module}/views/templates/{template}.eta
+ * - core/code/{module}/views/templates/{template}.art
  * To:
- * - templates/pages/{module}/{template}.eta
+ * - templates/pages/{module}/{template}.art
  *
  * @param {string} file
  */
-function moveTemplates (file) {
-  if (file.includes('_components')) {
-    fs.copySync(path.join(__dirname, '/pages/_components/templates'), path.join(__dirname, '../dist/templates/components/'))
-  } else if (file.includes('pages')) {
-    const moduleName = file.split('pages')[1]
+function moveTemplatesAndJavascript (file) {
+  if (file.includes('app/code')) {
+    const moduleName = file.split('app/code')[1]
       .replace('views', '')
       .replace('templates', '')
 
     fs.copySync(path.join(__dirname, file), path.join(__dirname, '../dist/templates/pages/', moduleName))
+  } else if (file.includes('components/')) {
+    fs.copySync(path.join(__dirname, '/app/components'), path.join(__dirname, '../dist/templates/components/'))
   }
 }
 
@@ -176,16 +194,36 @@ function movePublicFolderFile (file, type = '') {
   fs.copySync(path.join(__dirname, file), path.join(__dirname, `../dist/public/${type}`))
 }
 
+/**
+ * On start
+ * - find and watch all SCSS files
+ * - find and watch all templates
+ * - find and watch all js files
+*/
 makeDistFolder()
 findScss()
 findTemplates()
+findJavaScript()
 watchPublicFolders()
 
+/**
+ * Webpack and application bundling start here
+ */
+
+/**
+ * Should we watch?
+**/
 const webpackArgs = ['node_modules/webpack/bin/webpack.js']
 if (argv?.watch) {
   webpackArgs.push('--watch')
 }
 
+/**
+ * Run webpack
+ * - with or without watch
+ *
+ * On successful run, we'll start the server
+**/
 const webpack = spawn('node', webpackArgs)
 webpack.stdout.on('data', function (data) {
   process.stdout.write(data)
@@ -200,9 +238,11 @@ webpack.stderr.on('data', function (data) {
   process.stderr.write(data)
 })
 
+/**
+ * Run the application and pass along variables
+ */
 function runApp () {
-  const options = argv?.production ? { ...process.env, NODE_ENV: 'production' } : {}
-  const bundle = spawn('nodemon', ['dist/bundle.js'], options)
+  const bundle = spawn('nodemon', ['dist/bundle.js'], { env: process.env })
 
   appRunning = true
 

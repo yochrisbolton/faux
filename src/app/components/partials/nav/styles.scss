@@ -1,0 +1,151 @@
+@import "components/utils/variables";
+@import "components/utils/mixins";
+@import "components/utils/forms";
+
+nav {
+  @include brand-styles($title-color: $text-dark-darkest, $subtitle-color: $text-dark-darkest);
+
+  padding: 20px 0;
+  background: white;
+  width: 100%;
+  z-index: 6;
+  border-bottom: 2px solid #f4f4f4;
+
+  .brand {
+    .title {
+      font-size: 24px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 800;
+    }
+  }
+
+  .subtitle {
+    margin-top: 2px;
+  }
+
+  &.dark {
+    background: black;
+
+    .title,
+    input,
+    .subtitle {
+      color: white;
+    }
+
+    .search {
+      input {
+        border-color: white;
+        border: 2px solid #323232;
+        border-radius: 3px;
+
+        &:focus,
+        &:active,
+        &:hover {
+          border-color: white;
+        }
+      }
+    }
+  }
+
+  @include mobile-styles {
+    height: 65px;
+  }
+
+  .brand {
+    margin-right: 30px;
+
+    @include mobile-styles {
+      margin-right: 0;
+    }
+
+    a {
+      display: flex;
+    }
+  }
+
+  .contents {
+    display: flex;
+    align-items: center;
+    margin: auto;
+    height: 100%;
+    padding: 0 15px;
+    justify-content: space-between;
+  }
+
+  .mobile-search {
+    display: none;
+
+    @include mobile-styles {
+      display: block;
+    }
+  }
+
+  .search-container {
+    display: flex;
+    max-width: 440px;
+    flex: 1 1 auto;
+  }
+
+  .search {
+    position: relative;
+    flex-grow: 1;
+
+    @include mobile-styles {
+      display: none;
+    }
+
+    &.active {
+      display: flex;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 3;
+      height: 100%;
+      align-items: center;
+      width: 100%;
+      padding: 15px;
+      background: white;
+
+      .iconify {
+        top: auto;
+        left: 30px;
+        margin-top: -1px;
+
+        &.close {
+          left: initial;
+          right: 30px;
+          display: block;
+        }
+      }
+    }
+
+    .iconify {
+      position: absolute;
+      left: 15px;
+      color: #818181;
+      margin-top: auto;
+      font-size: 19px;
+      top: 14px;
+
+      &.close {
+        display: none;
+      }
+    }
+
+    input {
+      border-radius: 6px;
+      padding: 12px 12px 12px 40px;
+      border: 2px solid #f4f4f4;
+      border-radius: 0px;
+      transition: 0.1s;
+      border-radius: 3px;
+
+      &:focus,
+      &:active,
+      &:hover {
+        outline: none;
+        border: 2px solid black;
+      }
+    }
+  }
+}

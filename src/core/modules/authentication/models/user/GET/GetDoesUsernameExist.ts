@@ -1,4 +1,4 @@
-import { MongoHelper } from 'core/MongoHelper'
+import { MongoDriver } from 'core/database/Mongo/MongoDriver'
 
 /**
  * Checks if a username is already in database
@@ -7,7 +7,7 @@ import { MongoHelper } from 'core/MongoHelper'
  * @returns {Promise<boolean>}
  */
 export async function GetDoesUsernameExist (username: string): Promise<boolean> {
-  const mongo = MongoHelper.getDatabase()
+  const mongo = MongoDriver.getDatabase()
   const operationObject = await mongo.collection('users').findOne({
     username_lowercase: username.toLocaleLowerCase()
   })

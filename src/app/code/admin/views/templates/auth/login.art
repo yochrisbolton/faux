@@ -1,0 +1,26 @@
+<% $data.meta = {
+  styleSheet: 'login',
+  title: 'Admin Login'
+} %>
+<% extend('templates/pages/admin/layouts/login/layout') %>
+
+{{#block 'content'}}
+  <form class="content" data-action="/api/users/login" method="post"
+    onsubmit="window.faux.formTools.sendFormAjax(event, this)">
+    <div class="main raw-form">
+      <div class="field">
+        <div class="title">Username</div>
+        <input type="text" name="username" placeholder="Username" required>
+      </div>
+      <div class="field">
+        <div class="title">Password</div>
+        <input type="password" name="password" placeholder="Password" required>
+      </div>
+      <div class="toolbar">
+        <div class="actions">
+          <button class="post" type="submit">Login</button>
+        </div>
+      </div>
+    </div>
+  </form>
+{{/block}}

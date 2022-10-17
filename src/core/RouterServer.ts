@@ -1,105 +1,194 @@
-/** Faux Core */
 import * as controllers from 'core/controllers.index'
-import { TokenServices } from 'core/modules/authentication/services/TokenServices'
-import { GetDoesUserExistByToken } from 'core/modules/authentication/models/user/GET/GetDoesUserExistByToken'
-import { GetUserRoleByToken } from 'core/modules/authentication/models/user/GET/GetUserRoleByToken'
 import { logger } from 'core/utils/logger'
-
-/** Third Party */
-import { StatusCodes } from 'http-status-codes'
-import { Server } from '@overnightjs/core'
-import express, { NextFunction, Request, Response } from 'express'
-import cookieParser from 'cookie-parser'
-import compression from 'compression'
 import path from 'path'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import eta from 'eta'
-require('express-async-errors')
+import { generateProxyUrl } from 'core/utils/generateProxyUrl'
+import { fastify, FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
+import { bootstrap } from 'fastify-decorators'
+import { CheckIfUserExist } from './modules/authentication/middleware/CheckIfUserExist'
+import { CheckIfUserExistAndRedirectIfNot } from './modules/authentication/middleware/CheckIfUserExistAndRedirectIfNot'
+import art from 'art-template'
+import { fetchCss } from './utils/fetchCss'
+import { fetchJs } from './utils/fetchJs'
+import { GetArticleInfoById } from 'app/code/article/models/GET/GetArticleInfoById'
+import { GetSiteDomainById } from 'app/code/admin/models/GET/GetSiteDomainById'
+import { GetSiteInfoByDomain } from 'app/code/admin/models/GET/GetSiteInfoByDomain'
 
 /**
  * Starts the server
  */
-class RouterServer extends Server {
-  private static instance: RouterServer
+class RouterServer {
+  private readonly PROD_MODE = process.env['NODE' + '_ENV'] !== null ? process.env['NODE' + '_ENV'] === 'production' : false
+  private readonly app: FastifyInstance = fastify({
+    trustProxy: true,
+    ignoreTrailingSlash: true,
+    ignoreDuplicateSlashes: true
+  })
 
-  /**
-   * Return our RouterServer instance
-   */
-  public static getInstance (): RouterServer {
-    if (RouterServer.instance == null) {
-      RouterServer.instance = new RouterServer()
-    }
-
-    return RouterServer.instance
-  }
-
-  /**
-   * Sets up our dependencies
-   */
-  constructor () {
-    super(true)
-    this.app.set('view engine', 'eta')
-    this.app.set('views', path.join(__dirname, '/'))
-    this.app.set('trust proxy', 1)
-    this.app.use(compression())
-    this.app.use(express.static(path.join(__dirname, 'public')))
-    this.app.use(express.json())
-    this.app.use(cookieParser())
-    this.app.use(express.urlencoded({
-      extended: true
-    }))
+  private async registerPlugins (): Promise<void> {
+    await this.app.register(import('@fastify/rate-limit'), {
+      max: 100,
+      timeWindow: '1 minute'
+    })
 
     /**
-     * Inject into all routes _locals space
-     */
-    this.app.use(async function (req: Request, res: Response, next: NextFunction) {
-      const authToken = req.cookies['auth-token'] ?? ''
-      res.locals.loggedIn = false
+     * Needs to be registered before @fastify/static
+     * See: https://github.com/fastify/fastify-compress#global-hook
+     **/
+    await this.app.register(import('@fastify/compress'), {
+      global: true
+    })
 
-      if (authToken !== '') {
-        const tokenServices = TokenServices.getInstance()
-        const hashedToken = tokenServices.hashToken(authToken)
+    await this.app.register(import('@fastify/static'), {
+      root: path.join(__dirname, 'public')
+    })
 
-        try {
-          res.locals.loggedIn = await GetDoesUserExistByToken(hashedToken)
-          res.locals.role = await GetUserRoleByToken(hashedToken)
-        } catch (e) {
-          // ignore
+    art.defaults.rules[1].test = /{{#?([@]?)[ \t]*(\/?)([\w\W]*?)[ \t]*}}/
+
+    await this.app.register(import('@fastify/view'), {
+      engine: {
+        'art-template': art
+      },
+      root: path.join(__dirname, '/'),
+      production: this.PROD_MODE,
+      options: {
+        debug: !this.PROD_MODE,
+        cache: this.PROD_MODE,
+        minimize: this.PROD_MODE,
+        imports: {
+          fetchCss: fetchCss,
+          fetchJs: fetchJs,
+          generateProxyUrl: generateProxyUrl,
+          buildString: new Date().getTime().toString(),
+          encodeURIComponent: encodeURIComponent
         }
       }
-
-      next()
     })
 
-    this.app.use(function (_req, res, next) {
-      res.setHeader('X-Powered-By', 'Faux - batteries included TypeScript Express starter')
-      next()
+    await this.app.register(import('@fastify/cookie'), { secret: process.env.COOKIE_SECRET ?? 'change-me-in-env' })
+
+    await this.app.register(import('@fastify/formbody'))
+  }
+
+  private registerErrorHandler (): void {
+    this.app.setErrorHandler(function (error, _request, reply) {
+      // Log error
+      logger.log('error', error?.message ?? 'Unknown error', error)
+
+      if (process.env.SHOW_ERRORS === 'true') {
+        void reply.status(409).send({ error: error?.message ?? error })
+      } else {
+        void reply.status(409).redirect('/error')
+      }
     })
+  }
 
-    this.setupControllers()
-
-    this.app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-      logger.log('error', err.message, ...[err])
-      return res.status(StatusCodes.BAD_REQUEST).send({ error: err.message })
+  private registerNotFoundHandler (): void {
+    this.app.setNotFoundHandler((_req, reply) => {
+      void reply.status(302).redirect('/lost')
     })
   }
 
   /**
    * Load all controllers
    */
-  private setupControllers (): void {
+  private async setupControllers (): Promise<void> {
     const controllerInstances = []
     for (const name of Object.keys(controllers)) {
       const Controller = (controllers as any)[name]
-      if (typeof Controller === 'function') {
-        controllerInstances.push(new Controller())
-      }
+      controllerInstances.push(Controller)
+      logger.log('info', `Registering controller: ${name}`)
     }
-    super.addControllers(controllerInstances)
+
+    await this.app.register(bootstrap, {
+      controllers: controllerInstances
+    })
   }
 
-  public registerController (controller: any): void {
-    super.addControllers([controller])
+  public registerHooks (): void {
+    this.app.decorateReply('locals', null)
+    this.app.decorateRequest('meta', null)
+
+    this.app.addHook('onRequest', async function (request: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
+      const routerPath = request.routerPath
+      if (routerPath.substring(0, 6) === '/admin') return
+      reply.locals = {}
+      request.meta = {}
+
+      if (request.hostname.includes('localhost:')) {
+        console.time('Method')
+
+        console.time('Step 1')
+        const siteInfo = await GetSiteInfoByDomain({ $regex: '.*.', $options: 'i' })
+        console.timeEnd('Step 1')
+
+        console.time('Step 2')
+        reply.locals.siteInfo = {
+          site_name: siteInfo.site_name,
+          site_meta_description: siteInfo.site_meta_description,
+          site_disclaimer: siteInfo.site_disclaimer,
+          custom_css: `<style>${siteInfo.custom_css}</style>`,
+          domain_name: siteInfo.domain_name
+        }
+
+        request.meta.siteId = siteInfo.human_id
+        console.timeEnd('Step 2')
+
+        console.time('Step 3')
+        if (siteInfo.site_enabled === false && !routerPath.includes('/error')) {
+          void reply.status(302).redirect('/error')
+        }
+        console.timeEnd('Step 3')
+        console.timeEnd('Method')
+      } else {
+        const siteInfo = await GetSiteInfoByDomain(request.hostname)
+
+        reply.locals.siteInfo = {
+          site_name: siteInfo.site_name,
+          site_meta_description: siteInfo.site_meta_description,
+          site_disclaimer: siteInfo.site_disclaimer,
+          custom_css: `<style>${siteInfo.custom_css}</style>`,
+          domain_name: siteInfo.domain_name
+        }
+
+        request.meta.siteId = siteInfo.human_id
+
+        if (siteInfo == null) {
+          return await reply.status(500).send('Site not found')
+        }
+
+        if (siteInfo.site_enabled === false) {
+          void reply.status(302).redirect('/maintenance')
+        }
+
+        if (routerPath.includes('article/')) {
+          const article = await GetArticleInfoById(request.params.id)
+          const articleSite = article.site
+
+          if (article == null || article.enabled === false) {
+            return await reply.status(302).redirect('/lost')
+          }
+
+          const domain = await GetSiteDomainById(articleSite)
+
+          if (domain !== request.hostname) {
+            // Should we redirect to the right site? Or do we route to local 404?
+            return await reply.status(302).redirect('/lost')
+          }
+        }
+      }
+    })
+
+    this.app.addHook('preValidation', async function (request: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
+      if (!request.routerPath.includes('/admin/')) return
+
+      if (request.routerPath === '/admin/login' || request.routerPath === '/admin/register') {
+        if (await CheckIfUserExist(request)) {
+          return await reply.redirect('/admin/')
+        }
+      } else {
+        await CheckIfUserExistAndRedirectIfNot('/admin/login', request, reply)
+      }
+    })
   }
 
   /**
@@ -107,13 +196,16 @@ class RouterServer extends Server {
    *
    * @param port {Number} declare the server port
    */
-  public start (port: number): void {
-    this.app.get('*', (_req: Request, res: Response) => {
-      res.redirect('/lost')
-    })
+  public async start (port: number): Promise<void> {
+    this.registerErrorHandler()
+    await this.registerPlugins()
+    await this.setupControllers()
+    this.registerHooks()
+    this.registerNotFoundHandler()
 
-    this.app.listen(port, () => {
-      logger.log('info', `Running on port: ${port}`)
+    this.app.listen({ port: port, host: '0.0.0.0' }, (err, address) => {
+      if (err != null) throw err
+      logger.log('info', `Running on port: ${address}`)
     })
   }
 }

@@ -1,0 +1,19 @@
+<nav>
+  <div class="contents">
+    <div class="brand">
+      <a href="/" title="Go back to Site homepage">
+        <div class="name">
+          <div class="title">{{$data.siteInfo.site_name}}</div>
+        </div>
+      </a>
+    </div>
+    <form method="POST" action="/search" class="search-container">
+      <div class="search">
+        <span class="iconify" data-icon="eva:search-outline"></span>
+        <input placeholder="Type to search articles" name="query"
+          value="<%= it?.originalQuery ? it?.originalQuery : '' %>">
+        <span class="iconify close" data-icon="carbon:close"></span>
+      </div>
+    </form>
+  </div>
+</nav>

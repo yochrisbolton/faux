@@ -1,0 +1,63 @@
+<% $data.meta = {
+  title: $data.articleInfo?.title,
+  description: $data.articleInfo?.summary,
+  url: $data.siteInfo.domain_name,
+  moduleName: 'article',
+} %>
+<% extend('templates/components/layouts/promobar-nav-body-footer/promobar-nav-body-footer.art') %>
+
+{{#block 'content'}}
+  <section class="page-article">
+    <h1>{{$data.articleInfo?.title}}</h1>
+    <div class="summary">{{$data.articleInfo?.summary}}</div>
+    <div class="author">
+      <img src="{{$data.articleInfo?.author_image}}" alt="">
+      <div class="name">Updated by <b>{{$data.articleInfo?.author}}</b> as part of <b>{{$data.siteInfo?.site_name}}</b>
+      </div />
+    </div>
+    {{#if $data.articleInfo?.hero && $data.articleInfo?.show_hero }}
+      <img class="hero" src="{{$data.articleInfo?.hero}}" alt="{{$data.articleInfo?.title}}">
+    {{/if}}
+    <div class="article">
+      <div class="column column-share">
+        <div class="share">
+          <div class="list">
+            {{set shareUrl = $imports.encodeURIComponent('https://' + $data.siteInfo.domain_name + '/article/' + $data.articleInfo.human_id + '/' + $data.articleInfo.slug)}}
+            <a href="https://www.facebook.com/dialog/send?app_id=612977610282627&link={{shareUrl}}&redirect_uri={{shareUrl}}"
+              target="_blank" class="facebook"
+              data-mobile-href="fb-messenger://share?link={{shareUrl}}&app_id=612977610282627"
+              rel="noopener noreferrer">
+              <span class="iconify" data-icon="fa-brands:facebook-messenger"></span>
+            </a>
+            <a href="https://twitter.com/intent/tweet?text={{$imports.encodeURIComponent('Check out this article') + ' ' + shareUrl}}"
+              rel="noopener noreferrer" target="_blank">
+              <span class="iconify" data-icon="akar-icons:twitter-fill"></span>
+            </a>
+            <a href="https://www.facebook.com/dialog/share?href={{shareUrl}}&app_id=612977610282627"
+              rel="noopener noreferrer" target="_blank">
+              <span class="iconify" data-icon="cib:facebook-f"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <% var pIndex = 0 %>
+        {{#each $data.articleInfo?.markdown elem index}}
+          <% elem = elem.replace(/&nbsp;/g, '') %>
+          {{@elem}}
+
+          {{#if elem.includes('<p>')}}
+            {{#if index > 0 && index < $data.articleInfo?.markdown.length - 1}}
+              {{#if (pIndex === 5 || pIndex % 14 === 0) }}
+                <% include ('templates/components/partials/article-list/template', { title: 'Related article', related: $data.embeddedRelated }) %>
+              {{/if}}
+            {{/if}}
+            <% pIndex++ %>
+          {{/if}}
+        {{/each}}
+      </div>
+    </div>
+    <% include ('templates/components/partials/newsletter/template') %>
+    <% include ('templates/components/partials/article-list/template', { title: 'You may like', related: $data.related }) %>
+  </section>
+{{/block}}

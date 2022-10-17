@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title><%= $data.meta.title %></title>
+  <meta name="description" content="<%= $data.meta.description %>">
+</head>
+
+
+<body>
+  <% var pageCss = $imports.fetchCss($data.meta.moduleName) %>
+  {{#if pageCss}}
+    {{@pageCss}}
+  {{/if}}
+
+  {{#if $data.siteInfo?.custom_css}}
+    {{@$data.siteInfo.custom_css}}
+  {{/if}}
+
+  <section class="main">
+    {{#block 'content'}}{{/block}}
+  </section>
+</body>
+
+</html>

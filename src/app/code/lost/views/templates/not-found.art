@@ -1,0 +1,17 @@
+<% $data.meta = {
+  title: 'Page not found',
+  description: 'Sorry, but we couldn\'t find the page you were looking for.',
+  url: 'localhost:8080/lost',
+  moduleName: 'lost'
+} %>
+<% extend('templates/components/layouts/promobar-nav-body-footer/promobar-nav-body-footer.art') %>
+
+{{#block 'content'}}
+  <section class="page-not-found">
+    <div class="center">
+      <h2>Article not found</h2>
+      <p>We looked far and wide but we were unable to find that article - but the below might be related</p>
+    </div>
+    <% include ('templates/components/partials/article-list/template') %>
+  </section>
+{{/block}}

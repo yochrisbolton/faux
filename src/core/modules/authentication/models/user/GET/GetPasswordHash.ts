@@ -1,4 +1,4 @@
-import { MongoHelper } from 'core/MongoHelper'
+import { MongoDriver } from 'core/database/Mongo/MongoDriver'
 
 /**
  * Retrieves password hash for login by password
@@ -8,7 +8,7 @@ import { MongoHelper } from 'core/MongoHelper'
  * @throws {error} if user not found
  */
 export async function GetPasswordHash (username: string): Promise<string> {
-  const mongo = MongoHelper.getDatabase()
+  const mongo = MongoDriver.getDatabase()
   const operationObject = await mongo.collection('users').findOne({
     username_lowercase: username.toLocaleLowerCase()
   }, {

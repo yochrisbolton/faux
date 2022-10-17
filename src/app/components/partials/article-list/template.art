@@ -1,0 +1,16 @@
+<div class="article-list">
+  {{#if $data.title}}
+    <div class="title">{{ $data.title }}</div>
+  {{/if}}
+  <div class="articles">
+    {{#each $data.related article}}
+      <a href="/article/{{article.human_id}}/{{article.slug}}" class="article">
+        <img src="{{article.hero}}" alt="">
+        <div class="info">
+          <div class="title">{{article.title}}</div>
+          <div class="summary">{{article.summary}}</div>
+        </div>
+      </a>
+    {{/each}}
+  </div>
+</div>

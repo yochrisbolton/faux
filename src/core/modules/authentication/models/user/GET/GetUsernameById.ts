@@ -1,4 +1,4 @@
-import { MongoHelper } from 'core/MongoHelper'
+import { MongoDriver } from 'core/database/Mongo/MongoDriver'
 
 /**
  * Get username given a user human_id
@@ -8,7 +8,7 @@ import { MongoHelper } from 'core/MongoHelper'
  * @throws {error} if user not found
  */
 export async function GetUsernameById (id: string): Promise<string> {
-  const mongo = MongoHelper.getDatabase()
+  const mongo = MongoDriver.getDatabase()
   const operationObject = await mongo.collection('users').findOne({
     human_id: id
   }, {
