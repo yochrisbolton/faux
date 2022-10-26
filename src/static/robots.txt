@@ -1,3 +1,0 @@
-Sitemap: https://godotassetlibrary.com/sitemap.xml
-User-agent: *
-Allow: /
