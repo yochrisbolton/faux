@@ -1,0 +1,83 @@
+<% $data.meta = {
+  styleSheet: 'styles',
+  title: $data.postInfo?.title ? `Edit Category: ${$data.categoryInfo.name}` : 'Add Category',
+  name: $data.postInfo?.title ? `Edit Category: ${$data.categoryInfo.name}` : 'New Category',
+  active: 'category-list',
+  breadCrumbs: [
+    {
+      name: 'Admin',
+    },
+    {
+      name: 'Categories',
+      url: '/admin/category'
+    },
+    {
+      name: $data.categoryInfo?.title ? 'Edit Category' : 'New Category'
+    }
+  ]
+}
+
+if ($data.categoryInfo) {
+  $data.meta.actions = [
+    {
+      name: 'Delete Category',
+      props: [
+        { prop:'data-action', value: `/admin/category/delete/${ $data.categoryInfo.human_id }` },
+        { prop:'data-modal-trigger', value: 'delete' },
+        { prop:'data-type', value: 'Category' }
+      ]
+    },
+    {
+      name: 'Save Changes',
+      classes: 'accent',
+      props: [
+        { prop:'data-submit-form' }
+      ]
+    }
+  ]
+} else {
+  $data.meta.actions = [
+    {
+      name: 'Save Category',
+      classes: 'accent',
+      props: [
+        { prop:'data-submit-form' }
+      ]
+    }
+  ]
+} %>
+}
+
+%>
+<% extend('templates/pages/admin/layouts/sidebar-and-page/layout') %>
+
+{{#block 'content'}}
+  <form class="content"
+    data-action="/admin/category/{{$data.categoryInfo?.human_id ? 'update/' + $data.categoryInfo?.human_id : 'new'}}"
+    method="post" onsubmit="window.faux.formTools.sendFormAjax(event, this)">
+    <div class="main raw-form">
+      <div class="field">
+        <div class="title">Category Name <span class="required">required</span></div>
+        <div class="subtitle">The name that appears on the page</div>
+        <input type="text" name="name" placeholder="Category name" required value="{{$data.categoryInfo?.name ?? ''}}">
+      </div>
+      <div class="field">
+        <div class="title">Category Description</div>
+        <div class="subtitle">Quick summary of the category (optional)</div>
+        <input type="text" name="description" placeholder="Category summary"
+          value="{{$data.categoryInfo?.description ?? ''}}">
+      </div>
+    </div>
+    <div class="widgets">
+      <div class="widget">
+        <div class="title">Enabled</div>
+        <div class="subtitle">Disabled posts route to 'not found' page</div>
+        <select required autocomplete="off" name="enabled" value="{{$data.postInfo?.enabled ?? ''}}">
+          <option value="false" {{#if $data.postInfo?.enabled == false}}selected{{/if}}>Disabled</option>
+          <option value="true" {{#if $data.postInfo?.enabled == true}}selected{{/if}}>Enabled</option>
+        </select>
+      </div>
+    </div>
+  </form>
+  </div>
+{{/block}}

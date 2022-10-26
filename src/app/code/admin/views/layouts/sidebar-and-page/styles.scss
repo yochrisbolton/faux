@@ -17,10 +17,13 @@ body {
   margin: auto;
   background: #111315;
   color: white;
+  height: 100%;
 }
 
 .app {
   width: 100%;
+  height: 100%;
+  overflow: auto;
 }
 
 .main {
@@ -88,7 +91,8 @@ body {
 .sidebar {
   padding: 20px;
   border-right: 1px solid #2d2f31;
-  width: 240px;
+  width: 200px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
 

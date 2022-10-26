@@ -14,7 +14,6 @@ export async function InsertNewSiteModel (
   siteMetaImage: string,
   customCss: string,
   siteDisclaimer: string,
-  authorList: Array<{ id: string, name: string, image: string }>,
   newsletterHook: string
 ): Promise<any> {
   const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 12)
@@ -34,7 +33,6 @@ export async function InsertNewSiteModel (
     site_meta_image: siteMetaImage,
     custom_css: customCss,
     site_disclaimer: siteDisclaimer,
-    author_list: authorList,
     newsletter_hook: newsletterHook
   })
 

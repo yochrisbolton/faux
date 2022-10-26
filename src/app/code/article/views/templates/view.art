@@ -12,8 +12,6 @@
     <div class="summary">{{$data.articleInfo?.summary}}</div>
     <div class="author">
       <img src="{{$data.articleInfo?.author_image}}" alt="">
-      <div class="name">Updated by <b>{{$data.articleInfo?.author}}</b> as part of <b>{{$data.siteInfo?.site_name}}</b>
-      </div />
     </div>
     {{#if $data.articleInfo?.hero && $data.articleInfo?.show_hero }}
       <img class="hero" src="{{$data.articleInfo?.hero}}" alt="{{$data.articleInfo?.title}}">

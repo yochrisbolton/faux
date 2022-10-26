@@ -68,7 +68,7 @@ if ($data.postInfo) {
       </div>
       <div class="field">
         <div class="title">Hero Image <span class="required">required</span></div>
-        <div class="subtitle">The image that displays below the title (optional)</div>
+        <div class="subtitle">The image that displays below the title</div>
         <input type="text" name="hero" placeholder="Image URL" required value="{{$data.postInfo?.hero ?? ''}}">
       </div>
       <div class="field">
@@ -95,25 +95,13 @@ if ($data.postInfo) {
         </select>
       </div>
       <div class="widget">
-        <div class="title">Topic Site <span class="required">required</span></div>
-        <div class="subtitle">What site this post is for</div>
-        <select required autocomplete="off" name="site" value="{{$data.postInfo?.site ?? ''}}">
+        <div class="title">Category <span class="required">required</span></div>
+        <div class="subtitle">Category for this post</div>
+        <select required autocomplete="off" name="category" value="{{$data.postInfo?.category ?? ''}}">
           <option selected disabled value="">Select Option</option>
-          {{#each $data.siteList site}}
-            <option value="{{site.human_id}}" {{#if site.human_id == $data.postInfo?.site}}selected{{/if}}>
-              {{site.site_name}}
-            </option>
-          {{/each}}
-        </select>
-      </div>
-      <div class="widget">
-        <div class="title">Author</div>
-        <div class="subtitle">What author to associate with the post</div>
-        <select name="author" value="{{$data.postInfo?.author ?? ''}}">
-          <option selected value="auto">Automatic</option>
-          {{#each $data.authorList author}}
-            <option value="{{author.id}}" {{#if author.id == $data.postInfo?.author}}selected{{/if}}>
-              {{author.name}}
+          {{#each $data.categoryList category}}
+            <option value="{{category.human_id}}" {{#if category.human_id == $data.postInfo?.category}}selected{{/if}}>
+              {{category.name}}
             </option>
           {{/each}}
         </select>
@@ -147,32 +135,5 @@ if ($data.postInfo) {
       editor.$set({ value: e.detail.value })
       document.querySelector('[name="markdown"]').value = e.detail.value
     })
-
-    window.addEventListener('DOMContentLoaded', () => {
-      fetchAuthorList()
-    })
-
-    function fetchAuthorList() {
-      document.querySelector('[name="site"]').addEventListener('change', async (e) => {
-        const site = e.target.value
-        const response = await (await window.fetch(`/admin/posts/get/site/authors/${site}`)).json()
-
-        document.querySelector('[name="author"]').textContent = ''
-
-        const autoOption = document.createElement('option')
-        autoOption.value = 'auto'
-        autoOption.innerText = 'Automatic'
-        document.querySelector('[name="author"]').appendChild(autoOption)
-
-        response.authorList.forEach(author => {
-          const option = document.createElement('option')
-          option.value = author.id
-          option.innerText = author.name
-          document.querySelector('[name="author"]').appendChild(option)
-        })
-      })
-    }
-
-    fetchAuthorList()
   </script>
 {{/block}}

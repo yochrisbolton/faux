@@ -2,31 +2,31 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable indent */
 import { Controller, GET, POST } from 'fastify-decorators'
-import { PostService } from '../services/PostService'
+import { CategoryService } from '../services/CategoryService'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-@Controller('/admin/posts')
-export class PostsController {
-  private readonly PostService: PostService = new PostService()
+@Controller('/admin/category')
+export class CategoryController {
+  private readonly CategoryService: CategoryService = new CategoryService()
 
   @GET('*')
-  private async postGrid (req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
-    return await this.PostService.renderPostGrid(req, reply)
+  private async categoryGrid (req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
+    return await this.CategoryService.renderGrid(req, reply)
   }
 
   @GET('/new')
   private async newPostForm (req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
-    return await this.PostService.renderNewPost(req, reply)
+    return await this.CategoryService.renderNew(req, reply)
   }
 
   @GET('/:id')
   private async editPost (req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
-    return await this.PostService.renderNewPost(req, reply)
+    return await this.CategoryService.renderNew(req, reply)
   }
 
   @POST('/new')
   private async newPost (req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
-    return await this.PostService.post(req, reply)
+    return await this.CategoryService.post(req, reply)
   }
 
   @POST('/delete/:id', {
@@ -38,7 +38,7 @@ export class PostsController {
     }
   })
   private async deletePost (req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
-    return await this.PostService.deletePost(req, reply)
+    return await this.CategoryService.delete(req, reply)
   }
 
   @POST('/update/:id', {
@@ -50,6 +50,6 @@ export class PostsController {
     }
   })
   private async updatePost (req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
-    return await this.PostService.updatePost(req, reply)
+    return await this.CategoryService.update(req, reply)
   }
 }

@@ -1,6 +1,6 @@
 <form class="subscribe light" data-action="/subscribe" method="post"
   onsubmit="window.faux.formTools.sendFormAjax(event, this)">
-  <div class="title">Want to be an expert?</div>
+  <div class="title">Like what you read?</div>
   <div class="copy">Get the best of {{$data.siteInfo.site_name}} straight to your inbox.</div>
   <div class="row">
     <input type="text" placeholder="Your email" required>

@@ -1,17 +1,16 @@
 import * as controllers from 'core/controllers.index'
 import { logger } from 'core/utils/logger'
-import path from 'path'
 import { generateProxyUrl } from 'core/utils/generateProxyUrl'
 import { fastify, FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { bootstrap } from 'fastify-decorators'
 import { CheckIfUserExist } from './modules/authentication/middleware/CheckIfUserExist'
 import { CheckIfUserExistAndRedirectIfNot } from './modules/authentication/middleware/CheckIfUserExistAndRedirectIfNot'
-import art from 'art-template'
 import { fetchCss } from './utils/fetchCss'
 import { fetchJs } from './utils/fetchJs'
 import { GetArticleInfoById } from 'app/code/article/models/GET/GetArticleInfoById'
-import { GetSiteDomainById } from 'app/code/admin/models/GET/GetSiteDomainById'
-import { GetSiteInfoByDomain } from 'app/code/admin/models/GET/GetSiteInfoByDomain'
+import { GetSiteInfo } from 'app/code/admin/models/GET/GetSiteInfo'
+import path from 'path'
+import art from 'art-template'
 
 /**
  * Starts the server
@@ -109,79 +108,50 @@ class RouterServer {
     this.app.decorateRequest('meta', null)
 
     this.app.addHook('onRequest', async function (request: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
-      const routerPath = request.routerPath
+      const routerPath = request.url
       if (routerPath.substring(0, 6) === '/admin') return
+      if (routerPath.substring(0, 6) === '/api/u') return
       reply.locals = {}
       request.meta = {}
 
-      if (request.hostname.includes('localhost:')) {
-        console.time('Method')
+      let siteInfo: any = {}
+      try {
+        siteInfo = await GetSiteInfo()
+      } catch (e) {
+        siteInfo.site_name = 'Site Name'
+        siteInfo.site_meta_description = 'Site Description'
+        siteInfo.site_disclaimer = 'Site Disclaimer'
+        siteInfo.custom_css = ''
+        siteInfo.domain_name = 'localhost'
+      }
 
-        console.time('Step 1')
-        const siteInfo = await GetSiteInfoByDomain({ $regex: '.*.', $options: 'i' })
-        console.timeEnd('Step 1')
+      reply.locals.siteInfo = {
+        site_name: siteInfo.site_name,
+        site_meta_description: siteInfo.site_meta_description,
+        site_disclaimer: siteInfo.site_disclaimer,
+        custom_css: `<style>${siteInfo.custom_css}</style>`,
+        domain_name: siteInfo.domain_name
+      }
 
-        console.time('Step 2')
-        reply.locals.siteInfo = {
-          site_name: siteInfo.site_name,
-          site_meta_description: siteInfo.site_meta_description,
-          site_disclaimer: siteInfo.site_disclaimer,
-          custom_css: `<style>${siteInfo.custom_css}</style>`,
-          domain_name: siteInfo.domain_name
-        }
+      request.meta.siteId = siteInfo.human_id
 
-        request.meta.siteId = siteInfo.human_id
-        console.timeEnd('Step 2')
+      if (siteInfo == null || siteInfo.site_enabled === false) {
+        void reply.status(302).redirect('/maintenance')
+      }
 
-        console.time('Step 3')
-        if (siteInfo.site_enabled === false && !routerPath.includes('/error')) {
-          void reply.status(302).redirect('/error')
-        }
-        console.timeEnd('Step 3')
-        console.timeEnd('Method')
-      } else {
-        const siteInfo = await GetSiteInfoByDomain(request.hostname)
+      if (routerPath.includes('article/')) {
+        const article = await GetArticleInfoById(request.params.id)
 
-        reply.locals.siteInfo = {
-          site_name: siteInfo.site_name,
-          site_meta_description: siteInfo.site_meta_description,
-          site_disclaimer: siteInfo.site_disclaimer,
-          custom_css: `<style>${siteInfo.custom_css}</style>`,
-          domain_name: siteInfo.domain_name
-        }
-
-        request.meta.siteId = siteInfo.human_id
-
-        if (siteInfo == null) {
-          return await reply.status(500).send('Site not found')
-        }
-
-        if (siteInfo.site_enabled === false) {
-          void reply.status(302).redirect('/maintenance')
-        }
-
-        if (routerPath.includes('article/')) {
-          const article = await GetArticleInfoById(request.params.id)
-          const articleSite = article.site
-
-          if (article == null || article.enabled === false) {
-            return await reply.status(302).redirect('/lost')
-          }
-
-          const domain = await GetSiteDomainById(articleSite)
-
-          if (domain !== request.hostname) {
-            // Should we redirect to the right site? Or do we route to local 404?
-            return await reply.status(302).redirect('/lost')
-          }
+        if (article == null || article.enabled === false) {
+          return await reply.status(302).redirect('/lost')
         }
       }
     })
 
     this.app.addHook('preValidation', async function (request: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
-      if (!request.routerPath.includes('/admin/')) return
+      if (!request.url.includes('/admin/')) return
 
-      if (request.routerPath === '/admin/login' || request.routerPath === '/admin/register') {
+      if (request.url === '/admin/login' || request.url === '/admin/register') {
         if (await CheckIfUserExist(request)) {
           return await reply.redirect('/admin/')
         }

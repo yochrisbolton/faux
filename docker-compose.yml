@@ -29,7 +29,7 @@ services:
     command: npm run server
 
   db:
-    image: mongo:5.0.11
+    image: mongo:6.0.2
     container_name: faux_db
     restart: unless-stopped
     env_file: .env

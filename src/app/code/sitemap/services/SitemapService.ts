@@ -3,19 +3,13 @@ import striptags from 'striptags'
 import { SitemapStream, streamToPromise } from 'sitemap'
 import { createGzip } from 'zlib'
 import { GetEnabledArticlesBySiteId } from '../models/GET/GetEnabledArticlesBySiteId'
-import { GetSiteInfoByDomain } from 'app/code/admin/models/GET/GetSiteInfoByDomain'
+import { GetSiteInfo } from 'app/code/admin/models/GET/GetSiteInfo'
 
 export class SitemapService {
   public async render (req: FastifyRequest<WildBody>, res: FastifyReply): Promise<any> {
     const site = striptags(req.hostname)
 
-    let siteInfo: any
-
-    if (site.includes('localhost:')) {
-      siteInfo = await GetSiteInfoByDomain({ $regex: '.*.', $options: 'i' })
-    } else {
-      siteInfo = await GetSiteInfoByDomain(site)
-    }
+    const siteInfo = await GetSiteInfo()
 
     const articles = await GetEnabledArticlesBySiteId(siteInfo.human_id)
 

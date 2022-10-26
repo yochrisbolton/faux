@@ -2,7 +2,6 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import striptags from 'striptags'
 import { GetArticleInfoById } from '../models/GET/GetArticleInfoById'
 import { GetRelatedArticles } from '../models/GET/GetRelatedArticles'
-import { GetArticleAuthorInfo } from '../models/GET/GetArticleAuthorInfo'
 import { UpdateArticleImpressions } from '../models/UPDATE/UpdateArticleImpressions'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
@@ -76,14 +75,6 @@ export class ArticleService {
       }).catch(() => {
         // ignore
       })
-
-    try {
-      const authorInfo = await GetArticleAuthorInfo(articleInfo.site, articleInfo.author)
-      articleInfo.author = authorInfo.name
-      articleInfo.author_image = authorInfo.image
-    } catch (err) {
-      logger.log('error', `Unable to get author info for article ${id}`, err)
-    }
 
     return await res.view('templates/pages/article/view', { articleInfo: articleInfo, embeddedRelated: embeddedRelated, related: related })
   }

@@ -59,21 +59,17 @@
             <span class="iconify" data-icon="ci:list-checklist"></span>
             <span>All Articles</span>
           </a>
-          <a href="/admin/sites" class="item {{#if $data.meta.active == 'site-list'}}active{{/if}}">
+          <a href="/admin/category" class="item {{#if $data.meta.active == 'category-list'}}active{{/if}}">
             <span class="iconify" data-icon="ic:baseline-topic"></span>
-            <span>Topic Sites</span>
+            <span>Categories</span>
           </a>
-          <div class="item {{#if $data.meta.active == 'category-list'}}active{{/if}}">
-            <span class="iconify" data-icon="bxs:category"></span>
-            <span>Category Sites</span>
-          </div>
         </div>
       </div>
       <div class="bottom">
-        <div class="item">
+        <a href="/admin/settings" class="item {{#if $data.meta.active == 'settings'}}active{{/if}}">
           <span class="iconify" data-icon="bxs:cog"></span>
           <span>Settings</span>
-        </div>
+        </a>
         <div class="item">
           <span class="iconify" data-icon="majesticons:door-exit"></span>
           <span>Logout</span>

@@ -1,9 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { GetSiteList } from '../models/GET/GetSiteList'
-import { GetSiteInfoByName } from '../models/GET/GetSiteInfoByName'
-import striptags from 'striptags'
 import { Database } from 'core/database/Database'
 import { logger } from 'core/utils/logger'
+import striptags from 'striptags'
 
 export class AdminService {
   public async render (_req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
@@ -16,22 +14,6 @@ export class AdminService {
 
   public async renderRegister (_req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
     return await reply.view('templates/pages/admin/auth/register')
-  }
-
-  public async renderNewSite (req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
-    const siteName = striptags(req.params.name) ?? ''
-    const siteInfo = await GetSiteInfoByName(siteName)
-
-    return await reply.view('templates/pages/admin/sites/new-site', { siteInfo: siteInfo })
-  }
-
-  public async renderNewPost (_req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
-    return await reply.view('templates/pages/admin/posts/new')
-  }
-
-  public async renderSiteGrid (_req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {
-    const siteList = await GetSiteList()
-    return await reply.view('templates/pages/admin/sites/grid', { siteList: siteList })
   }
 
   public async flushCache (req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<void> {

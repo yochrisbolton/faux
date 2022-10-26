@@ -35,7 +35,6 @@ export class UserController {
   private async register (req: FastifyRequest<WildBody>, reply: FastifyReply): Promise<Response> {
     try {
       const registerService = await this.AuthService.register(req)
-
       return await reply.status(200).cookie('auth-token', registerService, this.cookieOptons).send({ token: registerService })
     } catch (e: any) {
       return await reply.status(400).send({ error: e.message })

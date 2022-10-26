@@ -1,26 +1,26 @@
 <% $data.meta = {
   styleSheet: 'styles',
-  title: 'View Articles',
-  active: 'post-list',
-  name: 'All Articles',
+  title: 'View Categories',
+  active: 'category-list',
+  name: 'All Categories',
   breadCrumbs: [
     {
       name: 'Admin',
     },
     {
-      name: 'Articles',
-      url: '/admin/posts'
+      name: 'Categories',
+      url: '/admin/category'
     }
   ],
   actions: [
     {
       name: 'Flush Cache',
-      url: '/admin/cache/flush/posts/posts',
+      url: '/admin/cache/flush/categories/categories',
       method: 'post'
     },
     {
-      name: 'Add New Article',
-      url: '/admin/posts/new',
+      name: 'Add New Category',
+      url: '/admin/category/new',
       class: 'accent'
     }
   ]
@@ -29,37 +29,36 @@
 <% extend('templates/pages/admin/layouts/sidebar-and-page/layout') %>
 
 {{#block 'content'}}
-  <form class="content" data-action="/admin/sites" method="post"
+  <form class="content" data-action="/admin/category" method="post"
     onsubmit="window.faux.formTools.sendFormAjax(event, this)">
     <div class="main">
       <table>
         <thead>
           <tr>
             <th>Title</th>
-            <th class="min">Views</th>
             <th class="min">Enabled</th>
-            <th class="min">Category</th>
+            <th class="min">Posts</th>
             <th class="fixed">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {{#each $data.postList post}}
+          {{#each $data.categoryList category}}
             <tr>
-              <td><a class="inherit" href="/admin/posts/{{post.human_id}}" title="{{post.title}}">{{post.title}}</a>
+              <td><a class="inherit" href="/admin/category/{{category.human_id}}"
+                  title="{{category.name}}">{{category.name}}</a>
               </td>
-              <td class="min">{{post.impressions}}</td>
-              <td class="min">{{post.enabled}}</td>
-              <td class="min">{{post.categoryName}}</td>
+              <td class="min">{{category.enabled}}</td>
+              <td class="min">{{category.post_count}}</td>
               <td class="fixed">
-                <a href="/admin/posts/{{post.human_id}}">Edit</a>
-                <a href="/article/{{post.human_id}}/{{post.slug}}" target="_blank" rel="noreferrer noopener">Visit</a>
+                <a href="/admin/category/{{category.human_id}}">Edit</a>
+                <a href="/category/{{category.slug}}" target="_blank" rel="noreferrer noopener">Visit</a>
               </td>
             </tr>
           {{/each}}
         </tbody>
       </table>
-      {{#if $data.postList.length === 0}}
-        <div class="none">Unable to find posts</div>
+      {{#if $data.categoryList.length === 0}}
+        <div class="none">Unable to find categories</div>
       {{/if}}
 
       <div class="actions">
@@ -67,7 +66,7 @@
           // TODO: Have this go through our other filter work - update or delete param vs resetting URL params on navigation
           // Reference the code below for how to do this
         -->
-        showing {{($data.pagination.start) + 1}}-{{$data.pagination.end}} posts of {{$data.pagination.total}} total
+        showing {{($data.pagination.start) + 1}}-{{$data.pagination.end}} categories of {{$data.pagination.total}} total
         {{#if (($data.pagination.page) - 1) >= 0}}
           <button type="button" class="prev" data-page="{{(($data.pagination.page) - 1)}}">Previous</button>
         {{/if}}
@@ -82,37 +81,24 @@
         <div class="subtitle">How to sort the grid</div>
         <select required autocomplete="off" name="sort-by">
           <option value="default" {{if $data.filters.sort == 'default'}} selected {{/if}}>Default</option>
-          <option value="impressions" {{if $data.filters.sort == 'impressions'}} selected {{/if}}>Impressions</option>
-          <option value="title" {{if $data.filters.sort == 'title'}} selected {{/if}}>Title</option>
+          <option value="impressions" {{if $data.filters.sort == 'posts'}} selected {{/if}}>Posts</option>
+          <option value="title" {{if $data.filters.sort == 'name'}} selected {{/if}}>Name</option>
           <option value="enabled" {{if $data.filters.sort == 'enabled'}} selected {{/if}}>Enabled</option>
         </select>
       </div>
       <div class="widget">
-        <div class="title">Title Filter</div>
-        <div class="subtitle">Filter by title</div>
-        <input type="text" placeholder="Title" autocomplete="off" name="title-filter" value="{{$data.filters.title}}">
-      </div>
-      <div class="widget">
-        <div class="title">Category Filter</div>
-        <div class="subtitle">Filter by Category</div>
-        <select required autocomplete="off" name="category-filter">
-          <option selected value="">All</option>
-          {{#each $data.categoryList category}}
-            <option value="{{category.human_id}}" {{if $data.filters.category == category.human_id}} selected {{/if}}>
-              {{category.name}}
-            </option>
-          {{/each}}
-        </select>
+        <div class="title">Name Filter</div>
+        <div class="subtitle">Filter by Name</div>
+        <input type="text" placeholder="Name" autocomplete="off" name="name-filter" value="{{$data.filters.name}}">
       </div>
     </div>
   </form>
   <script>
-    const titleFilter = document.querySelector('input[name="title-filter"]')
+    const nameFilter = document.querySelector('input[name="name-filter"]')
     const sortBy = document.querySelector('select[name="sort-by"]')
     const form = document.querySelector('form')
     const nextButton = document.querySelector('.actions .next')
     const previousButton = document.querySelector('.actions .prev')
-    const categoryFilter = document.querySelector('select[name="category-filter"]')
 
     // Originally inspired by  David Walsh (https://davidwalsh.name/javascript-debounce-function)
 
@@ -134,10 +120,10 @@
     };
 
     const returnFunction = debounce(() => {
-      UpdateUrlParam('title', titleFilter.value)
+      UpdateUrlParam('title', nameFilter.value)
     }, 500)
 
-    titleFilter.addEventListener('input', returnFunction)
+    nameFilter.addEventListener('input', returnFunction)
 
     if (nextButton) {
       nextButton.addEventListener('click', () => {
@@ -153,10 +139,6 @@
 
     sortBy.addEventListener('change', () => {
       UpdateUrlParam('sort', sortBy.value)
-    })
-
-    categoryFilter.addEventListener('change', () => {
-      UpdateUrlParam('category', categoryFilter.value)
     })
 
     function UpdateUrlParam(name, value) {

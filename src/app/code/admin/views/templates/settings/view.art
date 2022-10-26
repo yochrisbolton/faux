@@ -1,0 +1,115 @@
+<% $data.meta = {
+  styleSheet: 'styles',
+  title: 'Update Settings',
+  name: 'Update Settings',
+  active: 'settings',
+  breadCrumbs: [
+    {
+      name: 'Admin',
+    },
+    {
+      name: 'Update Settings',
+      url: '/admin/settings'
+    }
+  ]
+} 
+
+$data.meta.actions = [
+  {
+    name: 'Save Changes',
+    classes: 'accent',
+    props: [
+      { prop:'data-submit-form' }
+    ]
+  }
+]
+
+%>
+<% extend('templates/pages/admin/layouts/sidebar-and-page/layout') %>
+
+{{#block 'content'}}
+  <form class="content" data-action="/admin/setttings/update" method="post"
+    onsubmit="window.faux.formTools.sendFormAjax(event, this)">
+    <div class="main raw-form">
+      <div class="field">
+        <div class="title">Site Name <span class="required">required</span></div>
+        <div class="subtitle">What to name the site, used on pages</div>
+        <input type="text" name="site-name" placeholder="Ex, Howdy" required autocomplete="off"
+          value="{{$data.siteInfo?.site_name ?? ''}}">
+      </div>
+      <div class="field">
+        <div class="title">Disclaimer <span class="required">required</span></div>
+        <div class="subtitle">Disclaimer that goes in the footer</div>
+        <input type="text" name="site-disclaimer" placeholder="Ex, This site does not provide financial advice" required
+          autocomplete="off" value="{{$data.siteInfo?.site_disclaimer ?? ''}}">
+      </div>
+      <div class="field">
+        <div class="title">Site Description <span class="required">required</span></div>
+        <div class="subtitle">What shows up in google and when shared to facebook by default</div>
+        <input type="text" name="site-meta-description" placeholder="Ex, Find all the best information for ... here"
+          autocomplete="off" value="{{$data.siteInfo?.site_meta_description ?? ''}}" required>
+      </div>
+      <div class="field">
+        <div class="title">SEO Optimized Title</div>
+        <div class="subtitle">The title appears in google and facebook by default</div>
+        <input type="text" name="site-meta-title" placeholder="Ex, 'Website Name | Find The Best Info'"
+          autocomplete="off" value="{{$data.siteInfo?.site_meta_title ?? ''}}">
+      </div>
+      <div class="field">
+        <div class="title">CSS Editor</div>
+        <div class="subtitle">Optional custom CSS rules</div>
+        <textarea class="editor" autocomplete="off"></textarea>
+      </div>
+    </div>
+    <div class="widgets">
+      <div class="widget">
+        <div class="title">Enabled</div>
+        <div class="subtitle">Disabled sites don't allow routing</div>
+        <select required autocomplete="off" name="enabled">
+          <option value="false" {{#if $data.siteInfo?.site_enabled == false}}selected{{/if}}>Disabled</option>
+          <option value="true" {{#if $data.siteInfo?.site_enabled == true}}selected{{/if}}>Enabled</option>
+        </select>
+      </div>
+      <div class="widget">
+        <div class="title">Domain <span class="required">required</span></div>
+        <div class="subtitle">Sites domain name</div>
+        <input type="text" name="domain-name" placeholder="Ex, dynknow.group" required autocomplete="off"
+          value="{{$data.siteInfo?.domain_name ?? ''}}">
+      </div>
+    </div>
+    <div class="hidden">
+      <input type="text" name="site-id" value="{{@$data.siteInfo?.human_id ?? ''}}">
+      <textarea name="custom-css">{{@$data.siteInfo?.custom_css ?? ''}}</textarea>
+    </div>
+  </form>
+  <script>
+    function initCodeMirror() {
+      const editor = CodeMirror.fromTextArea(document.querySelector('.editor'), {
+        mode: 'css',
+        lineNumbers: true,
+        theme: 'ayu-mirage',
+        indentWithTabs: true,
+        tabSize: 2,
+      })
+
+      editor.setValue(document.querySelector('[name="custom-css"]').value)
+
+      editor.on('change', function () {
+        editor.save()
+        document.querySelector('[name="custom-css"]').value = editor.getValue()
+      })
+    }
+
+    function generateRandomId(length) {
+      let result = ''
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      const charactersLength = characters.length
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength))
+      }
+      return result
+    }
+
+    initCodeMirror()
+  </script>
+{{/block}}

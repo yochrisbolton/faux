@@ -14,12 +14,12 @@
 </head>
 
 <body>
-  <% var pageCss = $imports.fetchCss($data.meta.moduleName) %>
+  <% var pageCss = $imports.fetchCss('admin', 'login.css') %>
   {{#if pageCss}}
     {{@pageCss}}
   {{/if}}
 
-  <% var layoutJs = $imports.fetchJs('pages/admin/layouts/login') %>
+  <% var layoutJs = $imports.fetchJs('pages/admin/layouts/sidebar-and-page') %>
   {{#if layoutJs}}
     {{@layoutJs}}
   {{/if}}

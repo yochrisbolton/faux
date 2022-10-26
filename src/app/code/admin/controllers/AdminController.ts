@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable indent */
 import { Controller, GET, POST } from 'fastify-decorators'
 import { AdminService } from '../services/AdminService'
 import { FastifyReply, FastifyRequest } from 'fastify'

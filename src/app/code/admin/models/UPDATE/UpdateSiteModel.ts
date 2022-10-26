@@ -14,7 +14,6 @@ export async function UpdateSiteModel (
   siteMetaImage: string,
   customCss: string,
   siteDisclaimer: string,
-  authorList: Array<{ id: string, name: string, image: string }>,
   newsletterHook: string
 ): Promise<any> {
   const mongo = MongoDriver.getDatabase()
@@ -33,7 +32,6 @@ export async function UpdateSiteModel (
       site_meta_image: siteMetaImage,
       custom_css: customCss,
       site_disclaimer: siteDisclaimer,
-      author_list: authorList,
       newsletter_hook: newsletterHook
     }
   })

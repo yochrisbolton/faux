@@ -15,6 +15,7 @@ let appRunning = false
  *   that are added to the project and move them over to the dist
  *   folder
  */
+// eslint-disable-next-line no-unused-vars
 const foldersToWatch = [
   { path: 'templates', type: 'template', moveFunction: moveTemplatesAndJavascript },
   { path: 'javascript', type: 'javascript', moveFunction: moveTemplatesAndJavascript },
@@ -75,18 +76,6 @@ function findTemplates () {
  */
 function findJavaScript () {
   findAndWatch('/**/*.js', 'javascript', moveTemplatesAndJavascript)
-}
-
-/**
- * Watch static files in public/ or their sub
- * directories (such as javascript/ or images/)
- */
-
-function watchPublicFolders () {
-  /** on first load */
-  movePublicFolderFile('static')
-
-  watchFileOrFolder('static', 'static general', movePublicFolderFile)
 }
 
 /**
@@ -188,13 +177,6 @@ function moveTemplatesAndJavascript (file) {
 }
 
 /**
- * Move new files over
- */
-function movePublicFolderFile (file, type = '') {
-  fs.copySync(path.join(__dirname, file), path.join(__dirname, `../dist/public/${type}`))
-}
-
-/**
  * On start
  * - find and watch all SCSS files
  * - find and watch all templates
@@ -204,7 +186,6 @@ makeDistFolder()
 findScss()
 findTemplates()
 findJavaScript()
-watchPublicFolders()
 
 /**
  * Webpack and application bundling start here
